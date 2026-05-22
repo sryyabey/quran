@@ -84,6 +84,18 @@
       background:rgba(212,168,67,.07);
     }
 
+    /* Sura transition separator */
+    .qpr-sura-sep { margin: 10px 0 12px; text-align: center; }
+    .qpr-sura-sep-line {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:5px 12px;
+      border:1px solid rgba(184,134,11,.35);
+      border-radius:999px;
+      background:linear-gradient(180deg,#fffaf0 0%,#f7efdd 100%);
+    }
+    .qpr-sura-sep-orn  { color:#b89647; font-size:12px; line-height:1; }
+    .qpr-sura-sep-text { font-family:'Cairo',sans-serif; font-size:11px; letter-spacing:.4px; color:#8a6b2e; text-transform:uppercase; }
+
     /* ── Navigation ──────────────────────────────────────────── */
     .qpr-nav     { display:flex; justify-content:center; gap:8px; margin-top:14px; }
     .qpr-nav-btn { border:1px solid var(--border-strong); background:#fff; color:var(--text-mid); border-radius:9px; padding:8px 18px; font-family:'Cairo',sans-serif; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:background .13s, color .13s; }
@@ -323,6 +335,21 @@
 
     <div class="qpr-mushaf">
       @forelse ($rows as $row)
+        @php
+          $prev = $rows[$loop->index - 1] ?? null;
+          $isSuraStart = $loop->first || (($prev['sura'] ?? null) !== $row['sura']);
+        @endphp
+
+        @if(!$loop->first && $isSuraStart)
+          <div class="qpr-sura-sep" aria-hidden="true">
+            <div class="qpr-sura-sep-line">
+              <span class="qpr-sura-sep-orn">✦</span>
+              <span class="qpr-sura-sep-text">{{ $row['sura'] }}. Sure Baslangici</span>
+              <span class="qpr-sura-sep-orn">✦</span>
+            </div>
+          </div>
+        @endif
+
         <span class="qpr-ayah">
           {{-- Note count badge (top-left corner, above aya) --}}
           @if(($row['note_count'] ?? 0) > 0)

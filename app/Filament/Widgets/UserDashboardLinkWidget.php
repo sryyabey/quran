@@ -12,6 +12,6 @@ class UserDashboardLinkWidget extends Widget
 
     public static function canView(): bool
     {
-        return auth()->check() && auth()->user()->hasRole('super-admin');
+        return auth()->check() && auth()->user()->hasRole('super_admin');
     }
 }

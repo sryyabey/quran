@@ -42,7 +42,6 @@ class SalihPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
-                UserDashboardLinkWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

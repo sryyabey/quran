@@ -21,7 +21,7 @@ Route::get('/', function () {
     return redirect('/salih');
 });
 
-Route::middleware(['auth', 'role:user|super-admin'])->group(function (): void {
+Route::middleware(['auth', 'role:user|super_admin'])->group(function (): void {
     Route::view('/dashboard', 'dashboard.user')->name('user.dashboard');
     Route::view('/kuran-okuma', 'quran.read')->name('user.quran-read');
     Route::view('/kuran-metin', 'quran.text')->name('user.quran-text');

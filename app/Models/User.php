@@ -77,11 +77,11 @@ class User extends Authenticatable implements FilamentUser
 
     public function canImpersonate(): bool
     {
-        return $this->hasRole('super-admin');
+        return $this->hasRole('super_admin');
     }
 
     public function canBeImpersonated(): bool
     {
-        return ! $this->hasRole('super-admin');
+        return ! $this->hasRole('super_admin');
     }
 }
