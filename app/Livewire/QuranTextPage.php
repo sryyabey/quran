@@ -493,8 +493,9 @@ class QuranTextPage extends Component
         return QuranWord::query()
             ->where('sura', $this->selectedSura)
             ->where('aya', $this->selectedAya)
+            ->where('char_type', 'word')
             ->orderBy('position')
-            ->get(['position', 'text', 'simple']);
+            ->get(['position', 'text', 'simple', 'translation_tr']);
     }
 
     public function getCurrentArabicTextProperty(): string

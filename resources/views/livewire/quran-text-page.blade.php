@@ -306,7 +306,6 @@
             </div>
         @endif
 
-        {{-- Tefsir (satır içi akordeon) --}}
         {{-- Kelime Analizi (gizlenebilir) --}}
         <div>
             <button
@@ -325,17 +324,24 @@
                 <table class="qtp-word-table">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th style="width:32px;">#</th>
                             <th>Arapça</th>
                             <th>Transkripsiyon</th>
+                            <th>Türkçe Anlam</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($this->currentWords as $word)
                             <tr>
-                                <td>{{ $word->position }}</td>
-                                <td dir="rtl" style="font-family:'Amiri',serif; font-size: 20px;">{{ $word->text }}</td>
-                                <td>{{ $word->simple }}</td>
+                                <td style="color:var(--text-light);font-size:12px;">{{ $word->position }}</td>
+                                <td dir="rtl" style="font-family:'Amiri',serif; font-size: 20px; text-align:right;">{{ $word->text }}</td>
+                                <td style="color:var(--text-mid);">{{ $word->simple }}</td>
+                                @php
+                                    $hasTr = ! empty($word->translation_tr);
+                                @endphp
+                                <td style="font-weight: {{ $hasTr ? '600' : '400' }}; color: {{ $hasTr ? 'var(--teal-dark)' : 'var(--text-light)' }}; font-style: {{ $hasTr ? 'normal' : 'italic' }};">
+                                    {{ $word->translation_tr ?? '—' }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
