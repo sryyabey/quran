@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', "Tadabbur")</title>
+    <link rel="icon" type="image/webp" href="/logo.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -93,22 +94,6 @@
             gap: 12px;
             position: relative;
             z-index: 1;
-        }
-
-        .logo-emblem {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--gold-mid), #a07010);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .logo-emblem svg {
-            width: 22px;
-            height: 22px;
         }
 
         .logo-text {
@@ -392,15 +377,9 @@
                 gap: 9px;
             }
 
-            .logo-emblem {
+            .topbar-logo img {
                 width: 34px;
                 height: 34px;
-                border-radius: 8px;
-            }
-
-            .logo-emblem svg {
-                width: 18px;
-                height: 18px;
             }
 
             .logo-text {
@@ -565,13 +544,8 @@
     <div class="app">
         <header class="topbar">
             <div class="topbar-logo">
-                <div class="logo-emblem">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <polygon
-                            points="12,2.5 14.6,6.7 19.5,4.5 17.3,9.4 21.5,12 17.3,14.6 19.5,19.5 14.6,17.3 12,21.5 9.4,17.3 4.5,19.5 6.7,14.6 2.5,12 6.7,9.4 4.5,4.5 9.4,6.7" />
-                    </svg>
-                </div>
+                <img src="/logo.webp" alt="Suhuf"
+                    style="width:40px;height:40px;border-radius:10px;object-fit:cover;display:block;flex-shrink:0;">
                 <div>
                     <div class="logo-text">Suhuf</div>
                     <div class="logo-sub">Tadabbur</div>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suhuf — {{ __('Tadabbur') }}</title>
     <meta name="description" content="{{ __('hero_desc') }}">
+    <link rel="icon" type="image/webp" href="/logo.webp">
 
     {{-- Preconnect: DNS + TLS kurulumu önceden başlasın --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -85,18 +86,6 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
-        }
-
-        .nav-logo-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--teal-dark), var(--teal-mid));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #fff;
         }
 
         .nav-logo-text {
@@ -1222,7 +1211,8 @@
     {{-- NAVBAR --}}
     <nav class="nav">
         <a href="{{ route('home') }}" class="nav-logo">
-            <div class="nav-logo-icon"><i class="ti ti-book-2"></i></div>
+            <img src="/logo.webp" alt="Suhuf"
+                style="width:38px;height:38px;border-radius:10px;object-fit:cover;display:block;flex-shrink:0;">
             <div>
                 <div class="nav-logo-text">Suhuf</div>
                 <div class="nav-logo-sub">{{ __('Tadabbur') }}</div>
