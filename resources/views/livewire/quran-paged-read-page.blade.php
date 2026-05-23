@@ -252,6 +252,26 @@
       align-self: center;
     }
 
+    /* ── Besmele ─────────────────────────────────────────────── */
+    .qpr-besmele {
+      display: block;
+      text-align: center;
+      direction: rtl;
+      font-family: var(--arabic-font-family);
+      font-size: 26px;
+      font-weight: 400;
+      font-feature-settings: "liga" 1, "calt" 1, "kern" 1;
+      text-rendering: optimizeLegibility;
+      color: #3d2a08;
+      line-height: 2;
+      margin: 2px 0 18px;
+      padding: 10px 24px 8px;
+      background: linear-gradient(90deg, transparent, rgba(184,134,11,.06) 30%, rgba(184,134,11,.06) 70%, transparent);
+      border-top: 1px solid rgba(184,134,11,.2);
+      border-bottom: 1px solid rgba(184,134,11,.2);
+      letter-spacing: .3px;
+    }
+
     /* ── Navigation ──────────────────────────────────────────── */
     .qpr-nav {
       display: flex;
@@ -681,6 +701,11 @@
               @endif
             </div>
           </div>
+        @endif
+
+        {{-- Besmele: her surenin 1. ayetinden önce göster (Sure 1 ve Sure 9 hariç) --}}
+        @if($row['aya'] == 1 && $row['sura'] != 1 && $row['sura'] != 9)
+          <div class="qpr-besmele">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
         @endif
 
         <span class="qpr-ayah">
