@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Register') }} — Suhuf</title>
+    <title>{{ __('Sign In') }} — Suhuf</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
@@ -20,7 +20,6 @@
             --text-mid:   #4a4a45;
             --text-light: #8a8a82;
             --border:     #e2ddd4;
-            --border-focus: #2d9b84;
             --error-bg:   #fff2f2;
             --error-border: #fca5a5;
             --error-text: #991b1b;
@@ -40,13 +39,13 @@
             content: '';
             position: fixed; inset: 0; pointer-events: none; z-index: 0;
             background:
-                radial-gradient(ellipse 70% 50% at 30% 20%, rgba(45,155,132,.06) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 40% at 80% 80%, rgba(196,152,42,.05) 0%, transparent 60%);
+                radial-gradient(ellipse 70% 50% at 70% 20%, rgba(45,155,132,.06) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(196,152,42,.05) 0%, transparent 60%);
         }
 
         .page-wrap {
             position: relative; z-index: 1;
-            width: 100%; max-width: 440px;
+            width: 100%; max-width: 420px;
         }
 
         /* Logo */
@@ -78,6 +77,7 @@
             display: flex; align-items: flex-start; justify-content: space-between;
             margin-bottom: 28px;
         }
+        .card-header-text {}
         .card-title {
             font-size: 22px; font-weight: 800;
             color: var(--text-dark); letter-spacing: -.4px;
@@ -102,30 +102,31 @@
         .lang-btn.active { background: var(--teal-dark); color: #fff; }
         .lang-btn:not(.active):hover { color: var(--teal-dark); }
 
-        /* Hata kutusu */
-        .errors {
+        /* Hata */
+        .error-box {
             background: var(--error-bg);
             border: 1px solid var(--error-border);
             border-radius: 10px;
             padding: 12px 14px;
             margin-bottom: 20px;
-        }
-        .errors-title {
-            font-size: 12px; font-weight: 700; color: var(--error-text);
-            text-transform: uppercase; letter-spacing: .5px;
-            display: flex; align-items: center; gap: 6px;
-            margin-bottom: 6px;
-        }
-        .errors li {
+            display: flex; align-items: center; gap: 8px;
             font-size: 13px; color: var(--error-text);
-            list-style: none; padding: 2px 0;
-            padding-left: 16px; position: relative;
         }
-        .errors li::before {
-            content: '·'; position: absolute; left: 4px; font-weight: 700;
-        }
+        .error-box i { font-size: 16px; flex-shrink: 0; }
 
-        /* Form elemanları */
+        /* Başarı mesajı */
+        .success-box {
+            background: var(--teal-light);
+            border: 1px solid rgba(45,155,132,.25);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: var(--teal-dark); font-weight: 600;
+        }
+        .success-box i { font-size: 16px; flex-shrink: 0; }
+
+        /* Form */
         .form-group { margin-bottom: 18px; }
         .form-label {
             display: flex; align-items: center; gap: 6px;
@@ -141,14 +142,13 @@
             border: 1.5px solid var(--border);
             border-radius: 10px;
             font-family: 'Cairo', sans-serif;
-            font-size: 14px;
-            color: var(--text-dark);
+            font-size: 14px; color: var(--text-dark);
             background: #fff;
             transition: border-color .15s, box-shadow .15s;
             outline: none;
         }
         .form-input:focus {
-            border-color: var(--border-focus);
+            border-color: var(--teal-dark);
             box-shadow: 0 0 0 3px rgba(45,155,132,.12);
         }
         .form-input.is-error { border-color: var(--error-border); }
@@ -158,13 +158,6 @@
             position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
             font-size: 16px; color: var(--text-light); pointer-events: none;
         }
-
-        .input-hint {
-            font-size: 11px; color: var(--text-light);
-            margin-top: 5px; padding-left: 2px;
-        }
-
-        /* Şifre göster/gizle */
         .input-toggle {
             position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
             background: none; border: none; cursor: pointer;
@@ -174,6 +167,21 @@
         .input-toggle:hover { color: var(--teal-dark); }
         .form-input.has-toggle { padding-right: 40px; }
 
+        /* Beni hatırla satırı */
+        .form-row {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .remember-label {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 13px; color: var(--text-mid); cursor: pointer;
+        }
+        .remember-checkbox {
+            width: 16px; height: 16px;
+            border: 1.5px solid var(--border); border-radius: 4px;
+            accent-color: var(--teal-dark); cursor: pointer;
+        }
+
         /* Submit */
         .btn-submit {
             width: 100%; padding: 13px;
@@ -182,7 +190,6 @@
             font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
             cursor: pointer; transition: all .18s;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            margin-top: 8px;
             box-shadow: 0 4px 16px rgba(45,155,132,.25);
         }
         .btn-submit:hover {
@@ -200,31 +207,37 @@
             content: ''; flex: 1; height: 1px; background: var(--border);
         }
 
-        /* Giriş linki */
-        .login-link {
+        /* Kayıt linki */
+        .register-link {
             text-align: center; font-size: 14px; color: var(--text-mid);
         }
-        .login-link a {
+        .register-link a {
             color: var(--teal-dark); font-weight: 700; text-decoration: none;
         }
-        .login-link a:hover { text-decoration: underline; }
+        .register-link a:hover { text-decoration: underline; }
 
-        /* Gizlilik notu */
-        .privacy-note {
-            display: flex; align-items: flex-start; gap: 8px;
-            margin-top: 20px; padding: 12px 14px;
-            background: var(--teal-light); border-radius: 10px;
-            font-size: 12px; color: var(--text-mid); line-height: 1.6;
-        }
-        .privacy-note i { color: var(--teal-dark); font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-
-        /* Ana sayfa linki */
+        /* Ana sayfa */
         .back-link {
             display: flex; align-items: center; justify-content: center; gap: 5px;
             margin-top: 24px; font-size: 13px; color: var(--text-light);
             text-decoration: none; transition: color .15s;
         }
         .back-link:hover { color: var(--teal-dark); }
+
+        /* Ayet */
+        .ayah-wrap {
+            text-align: center; margin-top: 32px; padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+        .ayah-arabic {
+            font-family: 'Amiri', serif; font-size: 18px;
+            color: var(--text-light); direction: rtl; line-height: 2;
+            margin-bottom: 4px;
+        }
+        .ayah-source {
+            font-size: 11px; color: var(--text-light);
+            letter-spacing: .3px;
+        }
     </style>
 </head>
 <body>
@@ -243,9 +256,9 @@
     <!-- Kart -->
     <div class="card">
         <div class="card-header">
-            <div>
-                <h1 class="card-title">{{ __('Create an account') }}</h1>
-                <p class="card-sub">{{ __('Free, ad-free. Start your Quran study now.') }}</p>
+            <div class="card-header-text">
+                <h1 class="card-title">{{ __('Welcome back') }}</h1>
+                <p class="card-sub">{{ __('Sign in to your account to continue.') }}</p>
             </div>
             <div class="lang-switcher">
                 <a href="{{ route('locale.switch', 'tr') }}" class="lang-btn {{ app()->getLocale()==='tr' ? 'active' : '' }}">TR</a>
@@ -253,41 +266,24 @@
             </div>
         </div>
 
-        {{-- Hata mesajları --}}
-        @if ($errors->any())
-            <div class="errors">
-                <div class="errors-title">
-                    <i class="ti ti-alert-circle"></i>
-                    {{ __('Please fix the following') }}
-                </div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        {{-- Hata --}}
+        @if ($errors->has('email'))
+            <div class="error-box">
+                <i class="ti ti-alert-circle"></i>
+                {{ $errors->first('email') }}
             </div>
         @endif
 
-        <form method="POST" action="{{ route('register.store') }}">
-            @csrf
-
-            {{-- Ad Soyad --}}
-            <div class="form-group">
-                <label class="form-label" for="name">
-                    <i class="ti ti-user"></i> {{ __('Full Name') }}
-                </label>
-                <div class="input-wrap">
-                    <i class="ti ti-user input-icon"></i>
-                    <input
-                        id="name" name="name" type="text"
-                        class="form-input @error('name') is-error @enderror"
-                        value="{{ old('name') }}"
-                        placeholder="{{ __('Enter your name') }}"
-                        autocomplete="name"
-                        required
-                    >
-                </div>
+        {{-- Session mesajı --}}
+        @if (session('status'))
+            <div class="success-box">
+                <i class="ti ti-circle-check"></i>
+                {{ session('status') }}
             </div>
+        @endif
+
+        <form method="POST" action="{{ route('login.store') }}">
+            @csrf
 
             {{-- E-posta --}}
             <div class="form-group">
@@ -302,6 +298,7 @@
                         value="{{ old('email') }}"
                         placeholder="{{ __('email_placeholder') }}"
                         autocomplete="email"
+                        autofocus
                         required
                     >
                 </div>
@@ -316,53 +313,42 @@
                     <i class="ti ti-lock input-icon"></i>
                     <input
                         id="password" name="password" type="password"
-                        class="form-input has-toggle @error('password') is-error @enderror"
-                        placeholder="{{ __('At least 8 characters') }}"
-                        autocomplete="new-password"
+                        class="form-input has-toggle"
+                        placeholder="{{ __('Your password') }}"
+                        autocomplete="current-password"
                         required
                     >
-                    <button type="button" class="input-toggle" onclick="togglePass('password', this)" tabindex="-1">
-                        <i class="ti ti-eye"></i>
+                    <button type="button" class="input-toggle" onclick="togglePass()" tabindex="-1">
+                        <i id="eye-icon" class="ti ti-eye"></i>
                     </button>
                 </div>
-                <div class="input-hint">{{ __('At least 8 characters') }}</div>
             </div>
 
-            {{-- Şifre Tekrar --}}
-            <div class="form-group">
-                <label class="form-label" for="password_confirmation">
-                    <i class="ti ti-lock-check"></i> {{ __('Confirm Password') }}
+            {{-- Beni hatırla --}}
+            <div class="form-row">
+                <label class="remember-label">
+                    <input type="checkbox" name="remember" class="remember-checkbox" {{ old('remember') ? 'checked' : '' }}>
+                    {{ __('Remember me') }}
                 </label>
-                <div class="input-wrap">
-                    <i class="ti ti-lock-check input-icon"></i>
-                    <input
-                        id="password_confirmation" name="password_confirmation" type="password"
-                        class="form-input has-toggle"
-                        placeholder="{{ __('Re-enter your password') }}"
-                        autocomplete="new-password"
-                        required
-                    >
-                    <button type="button" class="input-toggle" onclick="togglePass('password_confirmation', this)" tabindex="-1">
-                        <i class="ti ti-eye"></i>
-                    </button>
-                </div>
             </div>
 
             <button type="submit" class="btn-submit">
-                <i class="ti ti-user-plus"></i>
-                {{ __('Create Account') }}
+                <i class="ti ti-login"></i>
+                {{ __('Sign In') }}
             </button>
         </form>
 
-        <div class="divider">{{ __('or') }}</div>
+        <div class="divider">{{ __("Don't have an account?") }}</div>
 
-        <div class="login-link">
-            {{ __('Already have an account?') }} <a href="{{ route('login') }}">{{ __('Sign in') }}</a>
+        <div class="register-link">
+            <a href="{{ route('register') }}">{{ __('Create a free account') }}</a>
+            — {{ __('quick and free') }}
         </div>
 
-        <div class="privacy-note">
-            <i class="ti ti-shield-check"></i>
-            {{ __('privacy_note') }}
+        {{-- Ayet --}}
+        <div class="ayah-wrap">
+            <div class="ayah-arabic">أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ</div>
+            <div class="ayah-source">Nisa 4:82</div>
         </div>
     </div>
 
@@ -374,9 +360,9 @@
 </div>
 
 <script>
-function togglePass(id, btn) {
-    const input = document.getElementById(id);
-    const icon  = btn.querySelector('i');
+function togglePass() {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('eye-icon');
     if (input.type === 'password') {
         input.type = 'text';
         icon.className = 'ti ti-eye-off';

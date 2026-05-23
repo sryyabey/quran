@@ -387,7 +387,7 @@ class QuranTextPage extends Component
 
     public function getCurrentSuraNameProperty(): string
     {
-        return self::$SURA_NAMES[$this->selectedSura] ?? ('Sure ' . $this->selectedSura);
+        return self::$SURA_NAMES[$this->selectedSura] ?? (__('Sura prefix') . ' ' . $this->selectedSura);
     }
 
     public function getSurasProperty()

@@ -184,12 +184,12 @@
     >
         <div class="qtp-resume-icon"><i class="ti ti-bookmark"></i></div>
         <div class="qtp-resume-text">
-            <div class="qtp-resume-title">Kaldığınız yerden devam ediyorsunuz</div>
+            <div class="qtp-resume-title">{{ __('Continuing where you left off') }}</div>
             <div class="qtp-resume-sub">
-                {{ $this->currentSuraName }} · {{ $selectedSura }}. Sure, {{ $selectedAya }}. Ayet
+                {{ $this->currentSuraName }} · {{ __('sura_ref', ['number' => $selectedSura]) }}, {{ __('verse_ref', ['number' => $selectedAya]) }}
             </div>
         </div>
-        <button type="button" @click="show = false" class="qtp-resume-close" title="Kapat">
+        <button type="button" @click="show = false" class="qtp-resume-close" title="{{ __('Close') }}">
             <i class="ti ti-x"></i>
         </button>
     </div>
@@ -198,10 +198,10 @@
 {{-- Sayfa Başlığı --}}
 <div class="qtp-page-header">
     <div>
-        <h1 class="qtp-page-title">Kur'an Metni</h1>
-        <p class="qtp-page-sub">Ayet bazlı okuma · dipnot · araştırma notu</p>
+        <h1 class="qtp-page-title">{{ __('Quran Text') }}</h1>
+        <p class="qtp-page-sub">{{ __('qt_subtitle') }}</p>
     </div>
-    <span class="qtp-kbd-hint"><kbd class="qtp-kbd">←</kbd> <kbd class="qtp-kbd">→</kbd> ile ayet arası geçiş</span>
+    <span class="qtp-kbd-hint"><kbd class="qtp-kbd">←</kbd> <kbd class="qtp-kbd">→</kbd> {{ __('navigate between verses') }}</span>
 </div>
 
 {{-- Navigasyon Kartı --}}
@@ -209,30 +209,30 @@
     <div class="qtp-nav-row">
         <div class="qtp-selects-row">
             <label class="qtp-field">
-                Sure
+                {{ __('Sura') }}
                 <select wire:model.live="selectedSura" class="qtp-select">
                     @foreach ($this->suras as $sura)
-                        <option value="{{ $sura }}">{{ $sura }}. Sure</option>
+                        <option value="{{ $sura }}">{{ __('sura_ref', ['number' => $sura]) }}</option>
                     @endforeach
                 </select>
             </label>
             <label class="qtp-field">
-                Ayet
+                {{ __('Verse') }}
                 <select wire:model.live="selectedAya" class="qtp-select">
                     @foreach ($this->ayas as $aya)
-                        <option value="{{ $aya }}">{{ $aya }}. Ayet</option>
+                        <option value="{{ $aya }}">{{ __('verse_ref', ['number' => $aya]) }}</option>
                     @endforeach
                 </select>
             </label>
         </div>
 
         <div class="qtp-aya-nav">
-            <button wire:click="prevAya" wire:loading.attr="disabled" type="button" class="qtp-nav-btn" title="Önceki Ayet (←)">
-                <i class="ti ti-chevron-left"></i> Önceki
+            <button wire:click="prevAya" wire:loading.attr="disabled" type="button" class="qtp-nav-btn" title="{{ __('Previous') }} (←)">
+                <i class="ti ti-chevron-left"></i> {{ __('Previous') }}
             </button>
             <span class="qtp-nav-badge" wire:loading.class="opacity-50">{{ $selectedSura }}:{{ $selectedAya }}</span>
-            <button wire:click="nextAya" wire:loading.attr="disabled" type="button" class="qtp-nav-btn" title="Sonraki Ayet (→)">
-                Sonraki <i class="ti ti-chevron-right"></i>
+            <button wire:click="nextAya" wire:loading.attr="disabled" type="button" class="qtp-nav-btn" title="{{ __('Next') }} (→)">
+                {{ __('Next') }} <i class="ti ti-chevron-right"></i>
             </button>
         </div>
     </div>
@@ -249,20 +249,20 @@
                     type="button"
                     @click="showNotesViewer = true"
                     class="qtp-notes-count-pill"
-                    title="{{ $this->currentNotes->count() }} not var"
+                    title="{{ __('notes_hover_existing', ['count' => $this->currentNotes->count()]) }}"
                 >
                     <i class="ti ti-notes"></i>
-                    {{ $this->currentNotes->count() }} not
+                    {{ $this->currentNotes->count() }} {{ __('note') }}
                 </button>
             @endif
         </div>
         <button type="button" @click="showNoteModal = true" class="qtp-add-note-btn">
-            <i class="ti ti-pencil-plus"></i> Not Al
+            <i class="ti ti-pencil-plus"></i> {{ __('Take Note') }}
         </button>
     </div>
 
     @if ($this->currentWords->isEmpty())
-        <div class="qtp-empty-state">Bu sure/ayet için veri bulunamadı.</div>
+        <div class="qtp-empty-state">{{ __('No data found for this verse.') }}</div>
     @else
         {{-- Arapça Metin --}}
         <div
@@ -278,10 +278,10 @@
             <div x-show="arabicHover" x-transition.opacity.duration.100ms class="qtp-ayah-hover-hint">
                 @if($this->currentNotes->isNotEmpty())
                     <i class="ti ti-notes"></i>
-                    {{ $this->currentNotes->count() }} not var — görüntülemek için tıklayın
+                    {{ __('notes_hover_existing', ['count' => $this->currentNotes->count()]) }}
                 @else
                     <i class="ti ti-notes"></i>
-                    Not eklemek için tıklayın
+                    {{ __('Click to add a note') }}
                 @endif
             </div>
         </div>
@@ -301,8 +301,8 @@
             </div>
         @else
             <div class="qtp-no-translation">
-                Tercüme görmek için
-                <a href="{{ route('user.settings') }}" class="qtp-link">dil ve meal tercihinizi ayarlayın.</a>
+                {{ __('qt_no_translation_pre') }}
+                <a href="{{ route('user.settings') }}" class="qtp-link">{{ __('qt_no_translation_link') }}</a>
             </div>
         @endif
 
@@ -314,7 +314,7 @@
                 class="qtp-collapsible-btn"
             >
                 <i class="ti ti-letters"></i>
-                Kelime Analizi
+                {{ __('Word Analysis') }}
                 <i
                     class="ti qtp-collapsible-chevron"
                     :class="showWordAnalysis ? 'ti-chevron-up open' : 'ti-chevron-down'"
@@ -325,9 +325,9 @@
                     <thead>
                         <tr>
                             <th style="width:32px;">#</th>
-                            <th>Arapça</th>
-                            <th>Transkripsiyon</th>
-                            <th>Türkçe Anlam</th>
+                            <th>{{ __('Arabic') }}</th>
+                            <th>{{ __('Transliteration') }}</th>
+                            <th>{{ __('Turkish Meaning') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -354,17 +354,17 @@
 {{-- Notlar Bölümü --}}
 <div class="qtp-card">
     <div class="qtp-notes-top">
-        <h2 class="qtp-section-title">Ayet Notlarım</h2>
+        <h2 class="qtp-section-title">{{ __('My Verse Notes') }}</h2>
         <div class="qtp-tag-add-row">
             <input
                 wire:model.defer="newTagName"
                 type="text"
                 class="qtp-input"
-                placeholder="Yeni etiket..."
+                placeholder="{{ __('New tag...') }}"
                 style="width: 160px;"
             >
             <button wire:click="saveTag" type="button" class="qtp-btn">
-                <i class="ti ti-tag"></i> Etiket Ekle
+                <i class="ti ti-tag"></i> {{ __('Add Tag') }}
             </button>
         </div>
     </div>
@@ -373,7 +373,7 @@
     @if($this->userTags->isNotEmpty())
         <div class="qtp-tags-filter">
             <button wire:click="$set('filterTagId', null)" type="button" class="qtp-tag {{ ! $filterTagId ? 'active' : '' }}">
-                Tümü
+                {{ __('All') }}
             </button>
             @foreach($this->userTags as $tag)
                 <button
@@ -391,7 +391,7 @@
             <div class="qtp-note-top">
                 <div class="qtp-note-title-row">
                     <span class="qtp-note-type-badge qtp-type-{{ $note->type }}">
-                        {{ match($note->type) { 'note' => 'Not', 'footnote' => 'Dipnot', 'research' => 'Araştırma', default => $note->type } }}
+                        {{ match($note->type) { 'note' => __('Note'), 'footnote' => __('Footnote'), 'research' => __('Research'), default => $note->type } }}
                     </span>
                     <span class="qtp-note-title">{{ $note->title }}</span>
                 </div>
@@ -401,14 +401,14 @@
                         @click="showNoteModal = true"
                         type="button"
                         class="qtp-action-btn"
-                        title="Düzenle"
+                        title="{{ __('Edit') }}"
                     ><i class="ti ti-edit"></i></button>
                     <button
                         wire:click="deleteNote({{ $note->id }})"
                         type="button"
                         class="qtp-action-btn danger"
-                        title="Sil"
-                        onclick="return confirm('Bu notu silmek istediğinize emin misiniz?')"
+                        title="{{ __('Delete') }}"
+                        onclick="return confirm('{{ __('delete_note_confirm') }}')"
                     ><i class="ti ti-trash"></i></button>
                 </div>
             </div>
@@ -417,7 +417,7 @@
                 @php $noteWord = $this->currentWords->firstWhere('position', $note->word_position); @endphp
                 <div class="qtp-note-word-chip">
                     <div>
-                        <div class="qtp-note-word-label">İlgili Kelime</div>
+                        <div class="qtp-note-word-label">{{ __('Related Word') }}</div>
                         <div class="qtp-note-word-ar">{{ $noteWord?->text ?? '—' }}</div>
                     </div>
                 </div>
@@ -437,8 +437,8 @@
     @empty
         <div class="qtp-notes-empty">
             <i class="ti ti-notes-off"></i>
-            <p>Bu ayet için henüz not yok.</p>
-            <button type="button" @click="showNoteModal = true" class="qtp-btn primary">İlk Notunu Al</button>
+            <p>{{ __('No notes for this verse yet.') }}</p>
+            <button type="button" @click="showNoteModal = true" class="qtp-btn primary">{{ __('Take Your First Note') }}</button>
         </div>
     @endforelse
 </div>
@@ -463,7 +463,7 @@
             <div>
                 <h2 class="qtp-modal-title">{{ $this->currentSuraName }} · {{ $selectedSura }}:{{ $selectedAya }}</h2>
                 <p style="margin:3px 0 0; font-size:12px; color:var(--text-light); font-family:'Cairo',sans-serif;">
-                    {{ $this->currentNotes->count() }} not
+                    {{ $this->currentNotes->count() }} {{ __('note') }}
                 </p>
             </div>
             <div style="display:flex; gap:8px; align-items:center;">
@@ -473,9 +473,9 @@
                     class="qtp-btn primary"
                     style="font-size:12px; padding:7px 12px;"
                 >
-                    <i class="ti ti-pencil-plus"></i> Not Al
+                    <i class="ti ti-pencil-plus"></i> {{ __('Take Note') }}
                 </button>
-                <button type="button" @click="showNotesViewer = false" class="qtp-modal-close" title="Kapat">
+                <button type="button" @click="showNotesViewer = false" class="qtp-modal-close" title="{{ __('Close') }}">
                     <i class="ti ti-x"></i>
                 </button>
             </div>
@@ -493,7 +493,7 @@
                 <div class="qtp-nv-note">
                     <div class="qtp-nv-note-head">
                         <span class="qtp-note-type-badge qtp-type-{{ $note->type }}">
-                            {{ match($note->type) { 'note' => 'Not', 'footnote' => 'Dipnot', 'research' => 'Araştırma', default => $note->type } }}
+                            {{ match($note->type) { 'note' => __('Note'), 'footnote' => __('Footnote'), 'research' => __('Research'), default => $note->type } }}
                         </span>
                         <span class="qtp-nv-note-title">{{ $note->title }}</span>
                         <span class="qtp-note-date">{{ $note->updated_at->format('d.m.Y') }}</span>
@@ -503,14 +503,14 @@
                             type="button"
                             class="qtp-action-btn"
                             style="width:26px; height:26px; font-size:13px;"
-                            title="Düzenle"
+                            title="{{ __('Edit') }}"
                         ><i class="ti ti-edit"></i></button>
                     </div>
                     @if($note->word_position)
                         @php $noteWord = $this->currentWords->firstWhere('position', $note->word_position); @endphp
                         <div class="qtp-note-word-chip">
                             <div>
-                                <div class="qtp-note-word-label">İlgili Kelime</div>
+                                <div class="qtp-note-word-label">{{ __('Related Word') }}</div>
                                 <div class="qtp-note-word-ar">{{ $noteWord?->text ?? '—' }}</div>
                             </div>
                         </div>
@@ -527,12 +527,12 @@
             @empty
                 <div class="qtp-notes-empty">
                     <i class="ti ti-notes-off"></i>
-                    <p>Bu ayet için henüz not yok.</p>
+                    <p>{{ __('No notes for this verse yet.') }}</p>
                     <button
                         type="button"
                         @click="showNotesViewer = false; showNoteModal = true"
                         class="qtp-btn primary"
-                    >İlk Notunu Al</button>
+                    >{{ __('Take Your First Note') }}</button>
                 </div>
             @endforelse
         </div>
@@ -557,12 +557,12 @@
     <div class="qtp-modal" @click.stop>
         <div class="qtp-modal-head">
             <h2 class="qtp-modal-title">
-                {{ $editingNoteId ? 'Notu Düzenle' : 'Yeni Not' }}
+                {{ $editingNoteId ? __('Edit Note') : __('New Note') }}
                 <span style="font-size:13px; font-weight:400; color:var(--text-light); margin-left:8px;">
                     {{ $this->currentSuraName }} · {{ $selectedSura }}:{{ $selectedAya }}
                 </span>
             </h2>
-            <button type="button" @click="showNoteModal = false" class="qtp-modal-close" title="Kapat">
+            <button type="button" @click="showNoteModal = false" class="qtp-modal-close" title="{{ __('Close') }}">
                 <i class="ti ti-x"></i>
             </button>
         </div>
@@ -570,17 +570,17 @@
         <div class="qtp-modal-body">
             <div class="qtp-form-grid">
                 <label class="qtp-field">
-                    Tür
+                    {{ __('Type') }}
                     <select wire:model.live="noteType" class="qtp-select">
-                        <option value="note">Not</option>
-                        <option value="footnote">Dipnot</option>
-                        <option value="research">Araştırma</option>
+                        <option value="note">{{ __('Note') }}</option>
+                        <option value="footnote">{{ __('Footnote') }}</option>
+                        <option value="research">{{ __('Research') }}</option>
                     </select>
                 </label>
                 <label class="qtp-field">
-                    Kelime (isteğe bağlı)
+                    {{ __('Word (optional)') }}
                     <select wire:model.live="noteWordPosition" class="qtp-select">
-                        <option value="" @selected(! $noteWordPosition)>Ayet geneli</option>
+                        <option value="" @selected(! $noteWordPosition)>{{ __('Whole verse') }}</option>
                         @foreach($this->currentWords as $word)
                             <option value="{{ $word->position }}" @selected($noteWordPosition == $word->position)>
                                 {{ $word->text }} ({{ $word->position }})
@@ -589,7 +589,7 @@
                     </select>
                 </label>
                 <label class="qtp-field">
-                    Etiketler
+                    {{ __('Tags') }}
                     <select wire:model="selectedTagIds" multiple class="qtp-select" style="min-height: 80px;">
                         @foreach($this->userTags as $tag)
                             <option value="{{ $tag->id }}">{{ $tag->name }}</option>
@@ -602,7 +602,7 @@
                 wire:model.defer="noteTitle"
                 type="text"
                 class="qtp-input"
-                placeholder="Not başlığı *"
+                placeholder="{{ __('Note title *') }}"
                 style="width: 100%;"
             >
             @error('noteTitle') <div class="qtp-error">{{ $message }}</div> @enderror
@@ -610,14 +610,14 @@
             <textarea
                 wire:model.live="noteContent"
                 class="qtp-textarea"
-                placeholder="Notunuzu yazın..."
+                placeholder="{{ __('Write your note...') }}"
             ></textarea>
             @error('noteContent') <div class="qtp-error">{{ $message }}</div> @enderror
 
             @if($noteContent !== '')
                 <div class="qtp-preview">
-                    <div class="qtp-preview-label">Önizleme</div>
-                    <div class="qtp-preview-title">{{ $noteTitle ?: 'Başlık girilmedi' }}</div>
+                    <div class="qtp-preview-label">{{ __('Preview') }}</div>
+                    <div class="qtp-preview-title">{{ $noteTitle ?: __('No title entered') }}</div>
                     <div class="qtp-preview-body">{!! nl2br(e($noteContent)) !!}</div>
                 </div>
             @endif
@@ -626,18 +626,18 @@
         <div class="qtp-modal-foot">
             @if($editingNoteId)
                 <button wire:click="updateNote" wire:loading.attr="disabled" type="button" class="qtp-btn primary">
-                    <span wire:loading.remove wire:target="updateNote"><i class="ti ti-device-floppy"></i> Güncelle</span>
-                    <span wire:loading wire:target="updateNote">Kaydediliyor...</span>
+                    <span wire:loading.remove wire:target="updateNote"><i class="ti ti-device-floppy"></i> {{ __('Update') }}</span>
+                    <span wire:loading wire:target="updateNote">{{ __('Saving...') }}</span>
                 </button>
                 <button wire:click="resetNoteForm" @click="showNoteModal = false" type="button" class="qtp-btn">
-                    Vazgeç
+                    {{ __('Discard') }}
                 </button>
             @else
                 <button wire:click="saveNote" wire:loading.attr="disabled" type="button" class="qtp-btn primary">
-                    <span wire:loading.remove wire:target="saveNote"><i class="ti ti-device-floppy"></i> Kaydet</span>
-                    <span wire:loading wire:target="saveNote">Kaydediliyor...</span>
+                    <span wire:loading.remove wire:target="saveNote"><i class="ti ti-device-floppy"></i> {{ __('Save') }}</span>
+                    <span wire:loading wire:target="saveNote">{{ __('Saving...') }}</span>
                 </button>
-                <button type="button" @click="showNoteModal = false" class="qtp-btn">İptal</button>
+                <button type="button" @click="showNoteModal = false" class="qtp-btn">{{ __('Cancel') }}</button>
             @endif
         </div>
     </div>

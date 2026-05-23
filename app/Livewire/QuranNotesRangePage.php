@@ -154,9 +154,9 @@ class QuranNotesRangePage extends Component
                                 return [
                                     'type' => $note->type,
                                     'type_label' => match ($note->type) {
-                                        'note' => 'Not',
-                                        'footnote' => 'Dipnot',
-                                        'research' => 'Araştırma',
+                                        'note' => __('Note'),
+                                        'footnote' => __('Footnote'),
+                                        'research' => __('Research'),
                                         default => $note->type,
                                     },
                                     'title' => $note->title,
@@ -206,7 +206,7 @@ class QuranNotesRangePage extends Component
 
     public static function getSuraNameStatic(int $sura): string
     {
-        return self::$SURA_NAMES[$sura] ?? ('Sure ' . $sura);
+        return self::$SURA_NAMES[$sura] ?? (__('Sura') . ' ' . $sura);
     }
 
     public static function getSuraNames(): array
@@ -348,7 +348,7 @@ class QuranNotesRangePage extends Component
             ->groupBy('sura')
             ->map(function ($suraGroup, $sura) use ($arabicTexts) {
                 return [
-                    'name'      => self::$SURA_NAMES[$sura] ?? ('Sure ' . $sura),
+                    'name'      => self::$SURA_NAMES[$sura] ?? (__('Sura') . ' ' . $sura),
                     'noteCount' => $suraGroup->count(),
                     'ayas'      => $suraGroup->groupBy('aya')->map(function ($ayaGroup, $aya) use ($sura, $arabicTexts) {
                         return [

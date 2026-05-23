@@ -137,8 +137,8 @@
 {{-- ── Başlık ────────────────────────────────────────────────────── --}}
 <div class="st-header">
   <div>
-    <h1 class="st-page-title"><i class="ti ti-chart-bar"></i> İstatistikler</h1>
-    <p class="st-page-sub">Araştırma alışkanlıklarınızın özeti</p>
+    <h1 class="st-page-title"><i class="ti ti-chart-bar"></i> {{ __('Statistics') }}</h1>
+    <p class="st-page-sub">{{ __('Summary of your study habits') }}</p>
   </div>
 </div>
 
@@ -147,17 +147,17 @@
   <div class="st-card">
     <div class="st-card-icon teal"><i class="ti ti-notes"></i></div>
     <div class="st-card-value">{{ $this->summary['total'] }}</div>
-    <div class="st-card-label">Toplam Not</div>
+    <div class="st-card-label">{{ __('Total Notes') }}</div>
   </div>
   <div class="st-card">
     <div class="st-card-icon gold"><i class="ti ti-book-2"></i></div>
     <div class="st-card-value">{{ $this->summary['active_suras'] }}</div>
-    <div class="st-card-label">Çalışılan Sure</div>
+    <div class="st-card-label">{{ __('Studied Suras') }}</div>
   </div>
   <div class="st-card">
     <div class="st-card-icon blue"><i class="ti ti-calendar-month"></i></div>
     <div class="st-card-value">{{ $this->summary['this_month'] }}</div>
-    <div class="st-card-label">Bu Ay Eklenen</div>
+    <div class="st-card-label">{{ __('Added This Month') }}</div>
   </div>
   <div class="st-card">
     <div class="st-card-icon orange"><i class="ti ti-flame"></i></div>
@@ -167,7 +167,7 @@
         <span class="st-streak-fire">🔥</span>
       @endif
     </div>
-    <div class="st-card-label">Günlük Seri</div>
+    <div class="st-card-label">{{ __('Daily Streak') }}</div>
   </div>
 </div>
 
@@ -175,15 +175,15 @@
 <div class="st-section">
   <div class="st-section-head">
     <div class="st-section-title">
-      <i class="ti ti-activity"></i> Aktivite Haritası
+      <i class="ti ti-activity"></i> {{ __('Activity Map') }}
     </div>
-    <span class="st-section-badge">Son 52 Hafta</span>
+    <span class="st-section-badge">{{ __('Last 52 Weeks') }}</span>
   </div>
   <div class="st-section-body">
     @if(empty($this->heatmapWeeks))
       <div class="st-empty">
         <i class="ti ti-chart-dots"></i>
-        <div class="st-empty-title">Henüz aktivite yok</div>
+        <div class="st-empty-title">{{ __('No activity yet') }}</div>
       </div>
     @else
       <div class="hm-outer">
@@ -204,7 +204,7 @@
                 @else
                   <div
                     class="hm-cell l{{ $day['level'] }}"
-                    title="{{ \Carbon\Carbon::parse($day['date'])->isoFormat('D MMMM YYYY') }}: {{ $day['count'] }} not"
+                    title="{{ \Carbon\Carbon::parse($day['date'])->locale(app()->getLocale())->isoFormat('D MMMM YYYY') }}: {{ $day['count'] }} {{ __('notes') }}"
                   ></div>
                 @endif
               @endforeach
@@ -214,7 +214,7 @@
 
         {{-- Lejant --}}
         <div class="hm-footer">
-          <span class="hm-legend-label">Az</span>
+          <span class="hm-legend-label">{{ __('Low') }}</span>
           <div class="hm-legend-cells">
             <div class="hm-cell l0" style="width:13px;height:13px;"></div>
             <div class="hm-cell l1" style="width:13px;height:13px;"></div>
@@ -222,7 +222,7 @@
             <div class="hm-cell l3" style="width:13px;height:13px;"></div>
             <div class="hm-cell l4" style="width:13px;height:13px;"></div>
           </div>
-          <span class="hm-legend-label">Çok</span>
+          <span class="hm-legend-label">{{ __('High') }}</span>
         </div>
       </div>
     @endif
@@ -236,15 +236,15 @@
   <div class="st-section">
     <div class="st-section-head">
       <div class="st-section-title">
-        <i class="ti ti-trophy"></i> En Çok Çalışılan Sureler
+        <i class="ti ti-trophy"></i> {{ __('Most Studied Suras') }}
       </div>
-      <span class="st-section-badge">İlk 8</span>
+      <span class="st-section-badge">{{ __('Top 8') }}</span>
     </div>
     <div class="st-section-body">
       @if($this->topSuras['items']->isEmpty())
         <div class="st-empty">
           <i class="ti ti-book-off"></i>
-          <div class="st-empty-title">Henüz not yok</div>
+          <div class="st-empty-title">{{ __('No notes yet') }}</div>
         </div>
       @else
         @foreach($this->topSuras['items'] as $row)
@@ -266,15 +266,15 @@
   <div class="st-section">
     <div class="st-section-head">
       <div class="st-section-title">
-        <i class="ti ti-chart-donut"></i> Tür Dağılımı
+        <i class="ti ti-chart-donut"></i> {{ __('Type Distribution') }}
       </div>
-      <span class="st-section-badge">{{ $this->summary['total'] }} not</span>
+      <span class="st-section-badge">{{ $this->summary['total'] }} {{ __('notes') }}</span>
     </div>
     <div class="st-section-body">
       @if($this->notesByType->isEmpty())
         <div class="st-empty">
           <i class="ti ti-notes-off"></i>
-          <div class="st-empty-title">Henüz not yok</div>
+          <div class="st-empty-title">{{ __('No notes yet') }}</div>
         </div>
       @else
         @foreach($this->notesByType as $t)
@@ -282,7 +282,7 @@
             <div class="st-type-head">
               <span class="st-type-badge st-type-{{ $t['type'] }}">{{ $t['label'] }}</span>
               <span class="st-type-meta">
-                <strong>{{ $t['count'] }}</strong> not · %{{ $t['percent'] }}
+                <strong>{{ $t['count'] }}</strong> {{ __('notes') }} · %{{ $t['percent'] }}
               </span>
             </div>
             <div class="st-type-bar-wrap">

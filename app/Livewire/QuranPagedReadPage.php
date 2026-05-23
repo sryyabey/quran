@@ -470,7 +470,7 @@ class QuranPagedReadPage extends Component
                 return [
                     'sura'        => $sura,
                     'aya'         => $aya,
-                    'sura_name'   => self::$SURA_NAMES[$sura] ?? "Sure {$sura}",
+                    'sura_name'   => self::$SURA_NAMES[$sura] ?? (__('Sura prefix') . " {$sura}"),
                     'arabic_text' => $group->pluck('text')->filter()->implode(' '),
                 ];
             })
@@ -487,7 +487,10 @@ class QuranPagedReadPage extends Component
             ->map(fn ($s) => (int) $s)
             ->map(fn (int $s): array => [
                 'value' => $s,
-                'label' => "{$s}. Sure — " . (self::$SURA_NAMES[$s] ?? "Sure {$s}"),
+                'label' => __('sura_option', [
+                    'number' => $s,
+                    'name'   => self::$SURA_NAMES[$s] ?? (__('Sura prefix') . " {$s}"),
+                ]),
             ])
             ->all();
     }
@@ -501,7 +504,7 @@ class QuranPagedReadPage extends Component
             ->orderBy('aya')
             ->pluck('aya')
             ->map(fn ($a) => (int) $a)
-            ->map(fn (int $a): array => ['value' => $a, 'label' => "{$a}. Ayet"])
+            ->map(fn (int $a): array => ['value' => $a, 'label' => __('verse_ref', ['number' => $a])])
             ->all();
     }
 

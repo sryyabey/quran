@@ -386,12 +386,12 @@
 <div class="qnr-header qnr-no-print">
   <div>
     <h1 class="qnr-page-title">
-      <i class="ti ti-notebook"></i> Not Araştırması
+      <i class="ti ti-notebook"></i> {{ __('Note Research') }}
     </h1>
-    <p class="qnr-page-sub">Sure ve ayet aralığı seçin, notlarınızı tek sayfada görüntüleyin</p>
+    <p class="qnr-page-sub">{{ __('Select a sura and verse range to view your notes on one page.') }}</p>
   </div>
   <a href="{{ route('user.quran-text') }}" class="qnr-header-link">
-    <i class="ti ti-book" style="font-size:14px;"></i> Kur'an Metnine Dön
+    <i class="ti ti-book" style="font-size:14px;"></i> {{ __('Back to Quran Text') }}
   </a>
 </div>
 
@@ -402,13 +402,13 @@
 
   {{-- ①  Aralık seçimi ──────────────────────────────────────────── --}}
   <div class="qnr-card-section">
-    <div class="qnr-section-label"><i class="ti ti-arrows-left-right"></i> Ayet Aralığı</div>
+    <div class="qnr-section-label"><i class="ti ti-arrows-left-right"></i> {{ __('Verse Range') }}</div>
     <div class="qnr-range-row">
 
       {{-- Başlangıç --}}
       <div class="qnr-range-side">
         <div>
-          <span class="qnr-field-label">Başlangıç Suresi</span>
+          <span class="qnr-field-label">{{ __('Start Sura') }}</span>
           <div
             x-data="suraCombo('startSura', {{ $startSura ?? 1 }})"
             class="sc-wrap"
@@ -429,7 +429,7 @@
                 <i class="ti ti-search"></i>
                 <input
                   type="text" x-ref="q" x-model="query"
-                  placeholder="Sure adı veya numarası..."
+                  placeholder="{{ __('Sura name or number...') }}"
                   class="sc-search-input"
                   @keydown="onKey"
                   autocomplete="off"
@@ -449,17 +449,17 @@
                     <span class="sc-opt-name" x-text="sura.l"></span>
                   </button>
                 </template>
-                <div x-show="filtered.length === 0" class="sc-no-result">Sonuç bulunamadı</div>
+                <div x-show="filtered.length === 0" class="sc-no-result">{{ __('No results found') }}</div>
               </div>
             </div>
           </div>
         </div>
 
         <div>
-          <span class="qnr-field-label">Başlangıç Ayeti</span>
+          <span class="qnr-field-label">{{ __('Start Verse') }}</span>
           <select wire:model.live="startAya" class="qnr-aya-select">
             @foreach($this->startAyas as $aya)
-              <option value="{{ $aya }}">{{ $aya }}. Ayet</option>
+              <option value="{{ $aya }}">{{ __(':number. Verse', ['number' => $aya]) }}</option>
             @endforeach
           </select>
         </div>
@@ -471,7 +471,7 @@
       {{-- Bitiş --}}
       <div class="qnr-range-side">
         <div>
-          <span class="qnr-field-label">Bitiş Suresi</span>
+          <span class="qnr-field-label">{{ __('End Sura') }}</span>
           <div
             x-data="suraCombo('endSura', {{ $endSura ?? 114 }})"
             class="sc-wrap"
@@ -492,7 +492,7 @@
                 <i class="ti ti-search"></i>
                 <input
                   type="text" x-ref="q" x-model="query"
-                  placeholder="Sure adı veya numarası..."
+                  placeholder="{{ __('Sura name or number...') }}"
                   class="sc-search-input"
                   @keydown="onKey"
                   autocomplete="off"
@@ -512,17 +512,17 @@
                     <span class="sc-opt-name" x-text="sura.l"></span>
                   </button>
                 </template>
-                <div x-show="filtered.length === 0" class="sc-no-result">Sonuç bulunamadı</div>
+                <div x-show="filtered.length === 0" class="sc-no-result">{{ __('No results found') }}</div>
               </div>
             </div>
           </div>
         </div>
 
         <div>
-          <span class="qnr-field-label">Bitiş Ayeti</span>
+          <span class="qnr-field-label">{{ __('End Verse') }}</span>
           <select wire:model.live="endAya" class="qnr-aya-select">
             @foreach($this->endAyas as $aya)
-              <option value="{{ $aya }}">{{ $aya }}. Ayet</option>
+              <option value="{{ $aya }}">{{ __(':number. Verse', ['number' => $aya]) }}</option>
             @endforeach
           </select>
         </div>
@@ -533,32 +533,32 @@
 
   {{-- ②  Not türü + etiket filtreleri ──────────────────────────── --}}
   <div class="qnr-card-section">
-    <div class="qnr-section-label"><i class="ti ti-filter"></i> Filtreler</div>
+    <div class="qnr-section-label"><i class="ti ti-filter"></i> {{ __('Filters') }}</div>
     <div class="qnr-filter-row">
       <div class="qnr-type-group">
         <button
           type="button" wire:click="$set('filterType', '')"
           class="qnr-type-btn {{ $filterType === '' ? 'active-all' : '' }}"
-        ><i class="ti ti-layout-list" style="font-size:13px;"></i> Tümü</button>
+        ><i class="ti ti-layout-list" style="font-size:13px;"></i> {{ __('All') }}</button>
         <button
           type="button" wire:click="$set('filterType', 'note')"
           class="qnr-type-btn {{ $filterType === 'note' ? 'active-note' : '' }}"
-        ><i class="ti ti-notes" style="font-size:13px;"></i> Not</button>
+        ><i class="ti ti-notes" style="font-size:13px;"></i> {{ __('Note') }}</button>
         <button
           type="button" wire:click="$set('filterType', 'footnote')"
           class="qnr-type-btn {{ $filterType === 'footnote' ? 'active-footnote' : '' }}"
-        ><i class="ti ti-bookmark" style="font-size:13px;"></i> Dipnot</button>
+        ><i class="ti ti-bookmark" style="font-size:13px;"></i> {{ __('Footnote') }}</button>
         <button
           type="button" wire:click="$set('filterType', 'research')"
           class="qnr-type-btn {{ $filterType === 'research' ? 'active-research' : '' }}"
-        ><i class="ti ti-microscope" style="font-size:13px;"></i> Araştırma</button>
+        ><i class="ti ti-microscope" style="font-size:13px;"></i> {{ __('Research') }}</button>
       </div>
 
       @if($this->userTags->isNotEmpty())
         <div class="qnr-tag-wrap">
           <i class="ti ti-tag" style="font-size:14px; color:var(--text-light);"></i>
           <select wire:model.live="filterTagId" class="qnr-tag-select">
-            <option value="">Tüm Etiketler</option>
+            <option value="">{{ __('All Tags') }}</option>
             @foreach($this->userTags as $tag)
               <option value="{{ $tag->id }}">#{{ $tag->name }}</option>
             @endforeach
@@ -579,29 +579,29 @@
         @if(! $this->isRangeValid) disabled @endif
       >
         <span wire:loading.remove wire:target="load">
-          <i class="ti ti-search" style="font-size:15px;"></i> Notları Getir
+          <i class="ti ti-search" style="font-size:15px;"></i> {{ __('Load Notes') }}
         </span>
         <span wire:loading wire:target="load">
-          <i class="ti ti-loader-2" style="font-size:14px; animation:spin 1s linear infinite;"></i> Yükleniyor...
+          <i class="ti ti-loader-2" style="font-size:14px; animation:spin 1s linear infinite;"></i> {{ __('Loading...') }}
         </span>
       </button>
 
       @if($loaded)
         <button type="button" class="qnr-btn-clear" wire:click="$set('loaded', false)">
-          <i class="ti ti-x" style="font-size:13px;"></i> Temizle
+          <i class="ti ti-x" style="font-size:13px;"></i> {{ __('Clear') }}
         </button>
       @endif
 
       @if(! $this->isRangeValid && $startSura && $startAya && $endSura && $endAya)
         <div class="qnr-range-invalid">
           <i class="ti ti-alert-circle" style="font-size:14px;"></i>
-          Bitiş, başlangıçtan önce olamaz.
+          {{ __('End cannot be before start.') }}
         </div>
       @endif
 
       @if($loaded && $this->totalNoteCount > 0)
         <div style="font-family:'Cairo',sans-serif; font-size:12.5px; color:var(--text-light); margin-left:4px;">
-          <span style="font-weight:700; color:var(--teal-dark);">{{ $this->totalNoteCount }}</span> not bulundu
+          <span style="font-weight:700; color:var(--teal-dark);">{{ $this->totalNoteCount }}</span> {{ __('notes found') }}
         </div>
       @endif
     </div>
@@ -616,11 +616,11 @@
 
   {{-- Print-only header --}}
   <div class="qnr-print-header">
-    <h1 class="qnr-print-title">Kur'an Not Araştırması</h1>
+    <h1 class="qnr-print-title">{{ __('Quran Note Research') }}</h1>
     <p class="qnr-print-meta">
-      Aralık: {{ $startSura }}:{{ $startAya }} → {{ $endSura }}:{{ $endAya }}
-      @if($filterType !== '') · {{ match($filterType) { 'note'=>'Not','footnote'=>'Dipnot','research'=>'Araştırma',default=>$filterType } }} @endif
-      · {{ $this->totalNoteCount }} not · {{ now()->format('d.m.Y H:i') }}
+      {{ __('Range') }}: {{ $startSura }}:{{ $startAya }} → {{ $endSura }}:{{ $endAya }}
+      @if($filterType !== '') · {{ match($filterType) { 'note' => __('Note'), 'footnote' => __('Footnote'), 'research' => __('Research'), default => $filterType } }} @endif
+      · {{ $this->totalNoteCount }} {{ __('notes') }} · {{ now()->format('d.m.Y H:i') }}
     </p>
   </div>
 
@@ -637,7 +637,7 @@
       @if($filterType !== '')
         <span class="qnr-summary-chip">
           <i class="ti ti-filter"></i>
-          {{ match($filterType) { 'note'=>'Not','footnote'=>'Dipnot','research'=>'Araştırma',default=>$filterType } }}
+          {{ match($filterType) { 'note' => __('Note'), 'footnote' => __('Footnote'), 'research' => __('Research'), default => $filterType } }}
         </span>
       @endif
       @if($filterTagId && $this->userTags->firstWhere('id', $filterTagId))
@@ -649,11 +649,11 @@
     </div>
     <div class="qnr-summary-actions">
       <button type="button" onclick="window.print()" class="qnr-print-btn">
-        <i class="ti ti-printer"></i> Yazdır
+        <i class="ti ti-printer"></i> {{ __('Print') }}
       </button>
       @if($this->groupedNotes->isNotEmpty())
         <button type="button" wire:click="openShareModal" class="qnr-share-btn">
-          <i class="ti ti-share"></i> Paylaş
+          <i class="ti ti-share"></i> {{ __('Share') }}
         </button>
       @endif
     </div>
@@ -663,8 +663,8 @@
   @if($this->groupedNotes->isEmpty())
     <div style="background:#fff; border:1px solid var(--border); border-radius:14px; text-align:center; padding:3rem 1rem;">
       <div style="font-size:44px; color:var(--sand); margin-bottom:.75rem;"><i class="ti ti-notes-off"></i></div>
-      <div style="font-family:'Cairo',sans-serif; font-size:16px; font-weight:600; color:var(--text-mid); margin-bottom:.4rem;">Bu aralıkta not bulunamadı</div>
-      <div style="font-family:'Cairo',sans-serif; font-size:12.5px; color:var(--text-light);">Farklı bir aralık veya filtre deneyin.</div>
+      <div style="font-family:'Cairo',sans-serif; font-size:16px; font-weight:600; color:var(--text-mid); margin-bottom:.4rem;">{{ __('No notes found in this range') }}</div>
+      <div style="font-family:'Cairo',sans-serif; font-size:12.5px; color:var(--text-light);">{{ __('Try a different range or filter.') }}</div>
     </div>
   @else
     @foreach($this->groupedNotes as $sura => $suraData)
@@ -675,7 +675,7 @@
           <div class="qnr-sura-num-badge">{{ $sura }}</div>
           <div class="qnr-sura-title">
             <div class="qnr-sura-name">{{ $suraData['name'] }}</div>
-            <div class="qnr-sura-info">{{ $suraData['ayas']->count() }} ayet · {{ $suraData['noteCount'] }} not</div>
+            <div class="qnr-sura-info">{{ $suraData['ayas']->count() }} {{ __('verses') }} · {{ $suraData['noteCount'] }} {{ __('notes') }}</div>
           </div>
           <span class="qnr-sura-note-pill">
             <i class="ti ti-notes" style="font-size:11px; margin-right:3px;"></i>{{ $suraData['noteCount'] }}
@@ -697,7 +697,7 @@
                 <span class="qnr-aya-end-mark">﴿{{ $aya }}﴾</span>
               </div>
               <div class="qnr-aya-meta">
-                <span class="qnr-aya-note-count">{{ $ayaData['notes']->count() }} not</span>
+                <span class="qnr-aya-note-count">{{ $ayaData['notes']->count() }} {{ __('notes') }}</span>
                 <i
                   class="ti qnr-aya-toggle"
                   :class="(expandedAyas['{{ $sura }}_{{ $aya }}'] ?? true) ? 'ti-chevron-up' : 'ti-chevron-down'"
@@ -715,7 +715,7 @@
                 <div class="qnr-note-card type-{{ $note->type }}">
                   <div class="qnr-note-head">
                     <span class="qnr-type-badge qnr-type-{{ $note->type }}">
-                      {{ match($note->type) { 'note'=>'Not','footnote'=>'Dipnot','research'=>'Araştırma',default=>$note->type } }}
+                      {{ match($note->type) { 'note' => __('Note'), 'footnote' => __('Footnote'), 'research' => __('Research'), default => $note->type } }}
                     </span>
                     @if($note->title)
                       <span class="qnr-note-title">{{ $note->title }}</span>
@@ -724,7 +724,7 @@
                   <div class="qnr-note-body-wrap">
                     @if($note->word_position && !empty($note->word_text))
                       <div class="qnr-word-chip">
-                        <span class="qnr-word-label">İlgili Kelime</span>
+                        <span class="qnr-word-label">{{ __('Related Word') }}</span>
                         <span class="qnr-word-ar">{{ $note->word_text }}</span>
                       </div>
                     @endif
@@ -760,7 +760,7 @@
       <div class="qnr-modal-head">
         <h3 class="qnr-modal-title">
           <i class="ti ti-share" style="font-size:17px;"></i>
-          Güvenli Paylaşım Linki
+          {{ __('Secure Share Link') }}
         </h3>
         <button type="button" class="qnr-modal-close" wire:click="closeShareModal">
           <i class="ti ti-x"></i>
@@ -769,38 +769,38 @@
 
       <div class="qnr-modal-body">
         <label class="qnr-modal-field" style="grid-column: 1 / -1;">
-          <span class="qnr-modal-label">Başlık (opsiyonel)</span>
-          <input type="text" wire:model="shareTitle" class="qnr-modal-input" placeholder="Örn: Bakara araştırma notları…">
+          <span class="qnr-modal-label">{{ __('Title (optional)') }}</span>
+          <input type="text" wire:model="shareTitle" class="qnr-modal-input" placeholder="{{ __('e.g. Bakara research notes...') }}">
         </label>
         <label class="qnr-modal-field">
-          <span class="qnr-modal-label">Görünürlük</span>
+          <span class="qnr-modal-label">{{ __('Visibility') }}</span>
           <select wire:model="shareVisibility" class="qnr-modal-select">
-            <option value="public">Herkese açık</option>
-            <option value="private">Sadece ben</option>
+            <option value="public">{{ __('Public') }}</option>
+            <option value="private">{{ __('Only me') }}</option>
           </select>
         </label>
         <label class="qnr-modal-field">
-          <span class="qnr-modal-label">Geçerlilik Süresi</span>
+          <span class="qnr-modal-label">{{ __('Expiration') }}</span>
           <select wire:model="shareExpiry" class="qnr-modal-select">
-            <option value="1d">1 gün</option>
-            <option value="7d">7 gün</option>
-            <option value="30d">30 gün</option>
-            <option value="none">Süresiz</option>
+            <option value="1d">{{ __('1 day') }}</option>
+            <option value="7d">{{ __('7 days') }}</option>
+            <option value="30d">{{ __('30 days') }}</option>
+            <option value="none">{{ __('No expiration') }}</option>
           </select>
         </label>
       </div>
 
       <div class="qnr-modal-foot">
-        <button type="button" class="qnr-modal-cancel" wire:click="closeShareModal">İptal</button>
+        <button type="button" class="qnr-modal-cancel" wire:click="closeShareModal">{{ __('Cancel') }}</button>
         <button type="button" class="qnr-modal-submit" wire:click="createShareLink">
-          <i class="ti ti-link" style="font-size:14px;"></i> Link Oluştur
+          <i class="ti ti-link" style="font-size:14px;"></i> {{ __('Create Link') }}
         </button>
       </div>
 
       @if($generatedShareUrl)
         <div class="qnr-modal-result">
           <div style="font-family:'Cairo',sans-serif; font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:.4px; margin-bottom:7px;">
-            <i class="ti ti-check" style="color:#22c55e; font-size:13px;"></i> Paylaşım Linki
+            <i class="ti ti-check" style="color:#22c55e; font-size:13px;"></i> {{ __('Share Link') }}
           </div>
           <input readonly class="qnr-modal-url" value="{{ $generatedShareUrl }}" onclick="this.select()">
           <div class="qnr-modal-socials">
@@ -813,7 +813,7 @@
               <i class="ti ti-brand-facebook"></i> Facebook
             </a>
             <button type="button" class="qnr-social-btn cp" onclick="qnrCopy('{{ $generatedShareUrl }}', this)">
-              <i class="ti ti-copy"></i> Kopyala
+              <i class="ti ti-copy"></i> {{ __('Copy') }}
             </button>
           </div>
         </div>
@@ -913,7 +913,7 @@ document.head.appendChild(styleEl);
 function qnrCopy(url, btn) {
   navigator.clipboard.writeText(url).then(() => {
     const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="ti ti-check"></i> Kopyalandı!';
+    btn.innerHTML = '<i class="ti ti-check"></i> {{ __('Copied!') }}';
     btn.style.color = '#22c55e';
     setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
   });

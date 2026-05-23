@@ -98,7 +98,7 @@
 
 @php
     $authUser = auth()->user();
-    $userName = $authUser?->name ?? 'Kullanıcı';
+    $userName = $authUser?->name ?? __('User');
     $userEmail = $authUser?->email ?? '';
     $initials  = collect(explode(' ', trim($userName)))
         ->filter()->map(fn($p) => mb_strtoupper(mb_substr($p, 0, 1)))->take(2)->implode('');
@@ -109,8 +109,8 @@
 
 {{-- Sayfa Başlığı --}}
 <div>
-    <h1 class="usp-page-title">Ayarlar</h1>
-    <p class="usp-page-sub">Hesap bilgileriniz ve okuma tercihlerinizi buradan yönetebilirsiniz</p>
+    <h1 class="usp-page-title">{{ __('Settings') }}</h1>
+    <p class="usp-page-sub">{{ __('You can manage your account information and reading preferences here.') }}</p>
 </div>
 
 {{-- Profil Kartı --}}
@@ -120,26 +120,23 @@
         <div class="usp-profile-info">
             <p class="usp-profile-name">{{ $userName }}</p>
             <p class="usp-profile-email">{{ $userEmail }}</p>
-            <span class="usp-profile-role">
-                <i class="ti ti-user"></i> Araştırmacı
-            </span>
         </div>
     </div>
     <div class="usp-profile-bot">
         <div class="usp-last-read">
             <i class="ti ti-bookmark" style="color:var(--text-light); font-size:15px;"></i>
-            <span style="font-size:12px; color:var(--text-light);">Son okunan:</span>
+            <span style="font-size:12px; color:var(--text-light);">{{ __('Last read:') }}</span>
             @if($lastSura && $lastAya)
                 <a href="{{ route('user.quran-text') }}" class="usp-last-read-badge">
                     <i class="ti ti-book"></i>
                     {{ $lastSura }}:{{ $lastAya }}
                 </a>
             @else
-                <span class="usp-no-read">Henüz okuma kaydedilmedi</span>
+                <span class="usp-no-read">{{ __('No reading saved yet') }}</span>
             @endif
         </div>
         <a href="{{ route('user.quran-text') }}" style="font-family:'Cairo',sans-serif; font-size:12px; color:var(--teal-dark); text-decoration:none; display:flex; align-items:center; gap:5px;">
-            <i class="ti ti-book"></i> Kur'an Metnine Git
+            <i class="ti ti-book"></i> {{ __('Go to Quran Text') }}
         </a>
     </div>
 </div>
@@ -149,8 +146,8 @@
     <div class="usp-card-header">
         <div class="usp-card-icon teal"><i class="ti ti-adjustments-horizontal"></i></div>
         <div>
-            <p class="usp-card-title">Okuma Tercihleri</p>
-            <p class="usp-card-sub">Tercüme dili ve meal seçimlerinizi yönetin</p>
+            <p class="usp-card-title">{{ __('Reading Preferences') }}</p>
+            <p class="usp-card-sub">{{ __('Manage your translation language and meal selections') }}</p>
         </div>
     </div>
 
@@ -160,12 +157,12 @@
         <div>
             <div class="usp-meal-divider" style="margin-bottom:12px;">
                 <div class="usp-meal-divider-line"></div>
-                <span class="usp-meal-divider-text"><i class="ti ti-language" style="font-size:11px;"></i> Tercüme Dili</span>
+                <span class="usp-meal-divider-text"><i class="ti ti-language" style="font-size:11px;"></i> {{ __('Translation Language') }}</span>
                 <div class="usp-meal-divider-line"></div>
             </div>
             <div class="usp-lang-row">
                 <div class="usp-field">
-                    <label class="usp-label">Dil Seçin</label>
+                    <label class="usp-label">{{ __('Select Language') }}</label>
                     <select wire:model.live="selectedLanguage" class="usp-select">
                         @foreach($this->languages as $language)
                             <option value="{{ $language }}">{{ $language }}</option>
@@ -174,7 +171,7 @@
                 </div>
                 <div class="usp-lang-hint">
                     <i class="ti ti-info-circle"></i>
-                    Dil seçimi aşağıdaki meal listesini günceller.
+                    {{ __('Language selection updates the meal list below.') }}
                 </div>
             </div>
         </div>
@@ -183,7 +180,7 @@
         <div>
             <div class="usp-meal-divider" style="margin-bottom:12px;">
                 <div class="usp-meal-divider-line"></div>
-                <span class="usp-meal-divider-text"><i class="ti ti-books" style="font-size:11px;"></i> Meal Tercihleri</span>
+                <span class="usp-meal-divider-text"><i class="ti ti-books" style="font-size:11px;"></i> {{ __('Meal Preferences') }}</span>
                 <div class="usp-meal-divider-line"></div>
             </div>
 
@@ -194,7 +191,7 @@
                     <div class="usp-meal-col-head">
                         <span class="usp-meal-col-title">
                             <i class="ti ti-circle-check" style="color:var(--teal-dark);"></i>
-                            Seçili Mealler
+                            {{ __('Selected Meals') }}
                         </span>
                         <span class="usp-meal-count selected">{{ count($selectedMealKeys) }}</span>
                     </div>
@@ -206,7 +203,7 @@
                                     wire:click="removeMeal('{{ $mealKey }}')"
                                     type="button"
                                     class="usp-meal-btn remove"
-                                    title="Kaldır"
+                                    title="{{ __('Remove') }}"
                                 >
                                     <i class="ti ti-x"></i>
                                 </button>
@@ -214,7 +211,7 @@
                         @empty
                             <div class="usp-meal-empty">
                                 <i class="ti ti-inbox"></i>
-                                <span>Seçili meal yok.<br>Sağdan ekleyin.</span>
+                                <span>{{ __('No selected meals.') }}<br>{{ __('Add from the right.') }}</span>
                             </div>
                         @endforelse
                     </div>
@@ -225,7 +222,7 @@
                     <div class="usp-meal-col-head">
                         <span class="usp-meal-col-title">
                             <i class="ti ti-plus-circle" style="color:var(--text-light);"></i>
-                            Eklenebilir Mealler
+                            {{ __('Available Meals') }}
                         </span>
                         <span class="usp-meal-count available">{{ $this->availableMeals->count() }}</span>
                     </div>
@@ -237,7 +234,7 @@
                                     wire:click="addMeal('{{ $mealKey }}')"
                                     type="button"
                                     class="usp-meal-btn add"
-                                    title="Ekle"
+                                    title="{{ __('Add') }}"
                                 >
                                     <i class="ti ti-plus"></i>
                                 </button>
@@ -245,7 +242,7 @@
                         @empty
                             <div class="usp-meal-empty">
                                 <i class="ti ti-check"></i>
-                                <span>Tüm mealler seçili.</span>
+                                <span>{{ __('All meals are selected.') }}</span>
                             </div>
                         @endforelse
                     </div>
@@ -257,7 +254,7 @@
         {{-- Bilgi Notu --}}
         <div class="usp-info-note">
             <i class="ti ti-alert-circle"></i>
-            Seçimleriniz geçici olarak uygulanır. Değişiklikleri kalıcı hale getirmek için <strong>Tercihleri Kaydet</strong> butonuna tıklayın.
+            {{ __('Your selections are applied temporarily. To make changes permanent, click') }} <strong>{{ __('Save Preferences') }}</strong>.
         </div>
 
         {{-- Kaydet Satırı --}}
@@ -269,10 +266,10 @@
                 class="usp-save-btn"
             >
                 <span wire:loading.remove wire:target="savePreferences">
-                    <i class="ti ti-device-floppy"></i> Tercihleri Kaydet
+                    <i class="ti ti-device-floppy"></i> {{ __('Save Preferences') }}
                 </span>
                 <span wire:loading wire:target="savePreferences">
-                    <i class="ti ti-loader-2"></i> Kaydediliyor...
+                    <i class="ti ti-loader-2"></i> {{ __('Saving...') }}
                 </span>
             </button>
 
@@ -287,7 +284,7 @@
                 class="usp-success-toast"
                 style="display:none;"
             >
-                <i class="ti ti-circle-check"></i> Tercihler başarıyla kaydedildi!
+                <i class="ti ti-circle-check"></i> {{ __('Preferences saved successfully!') }}
             </div>
         </div>
 

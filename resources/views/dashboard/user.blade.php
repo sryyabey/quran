@@ -1,6 +1,6 @@
 @extends('layouts.user-dashboard')
 
-@section('title', 'Dashboard')
+@section('title', __('Overview'))
 
 @push('head')
 <style>
@@ -328,10 +328,10 @@
     <div class="db-hero-meta-left">
       <span class="db-hero-badge">
         <i class="ti ti-moon-stars" style="font-size:11px;"></i>
-        Günün Ayeti
+        {{ __('Verse of the Day') }}
       </span>
       <span class="db-hero-date">
-        {{ \Carbon\Carbon::now()->locale('tr')->isoFormat('D MMMM Y') }}
+        {{ \Carbon\Carbon::now()->locale(app()->getLocale())->isoFormat('D MMMM Y') }}
       </span>
     </div>
     @if($dailyVerse)
@@ -339,7 +339,7 @@
       href="{{ route('user.quran-text') }}?sura={{ $dailyVerse->sura }}&aya={{ $dailyVerse->aya }}"
       class="db-hero-link"
     >
-      Okuma sayfasında aç <i class="ti ti-arrow-right" style="font-size:12px;"></i>
+      {{ __('Open in reading page') }} <i class="ti ti-arrow-right" style="font-size:12px;"></i>
     </a>
     @endif
   </div>
@@ -355,7 +355,7 @@
         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
       </div>
       <div class="db-hero-divider"></div>
-      <div class="db-turkish" style="opacity:.7;">Rahman ve Rahim olan Allah'ın adıyla.</div>
+      <div class="db-turkish" style="opacity:.7;">{{ __('basmala_translation') }}</div>
     @endif
   </div>
 
@@ -366,12 +366,12 @@
       <i class="ti ti-book-2" style="font-size:12px;opacity:.6;"></i>
       <span class="db-ref-sura">{{ $dailySuraName }}</span>
       <span class="db-ref-sep">·</span>
-      {{ $dailyVerse->aya }}. Ayet
+      {{ __('verse_ref', ['number' => $dailyVerse->aya]) }}
     </span>
     @else
     <span class="db-ref" style="opacity:.5;">
       <i class="ti ti-book-2" style="font-size:12px;"></i>
-      Fâtiha · 1. Ayet
+      Fâtiha · {{ __('verse_ref', ['number' => 1]) }}
     </span>
     @endif
   </div>
@@ -383,22 +383,22 @@
   <div class="db-stat">
     <div class="db-stat-icon teal"><i class="ti ti-book-2"></i></div>
     <div class="db-stat-value">114</div>
-    <div class="db-stat-label">Toplam Sure</div>
+    <div class="db-stat-label">{{ __('Total Suras') }}</div>
   </div>
   <div class="db-stat">
     <div class="db-stat-icon gold"><i class="ti ti-notes"></i></div>
     <div class="db-stat-value">{{ $noteCount }}</div>
-    <div class="db-stat-label">Araştırma Notu</div>
+    <div class="db-stat-label">{{ __('Research Notes') }}</div>
   </div>
   <div class="db-stat">
     <div class="db-stat-icon purple"><i class="ti ti-tag"></i></div>
     <div class="db-stat-value">{{ $tagCount }}</div>
-    <div class="db-stat-label">Etiket</div>
+    <div class="db-stat-label">{{ __('Tags') }}</div>
   </div>
   <div class="db-stat">
     <div class="db-stat-icon blue"><i class="ti ti-books"></i></div>
     <div class="db-stat-value">{{ $recentSuraNumbers->count() }}</div>
-    <div class="db-stat-label">Çalışılan Sure</div>
+    <div class="db-stat-label">{{ __('Studied Suras') }}</div>
   </div>
 </div>
 
@@ -408,10 +408,10 @@
    href="{{ route('user.quran-text') }}?sura={{ $setting->last_read_sura }}&aya={{ $setting->last_read_aya }}">
   <i class="ti ti-player-play db-resume-icon"></i>
   <div>
-    <div class="db-resume-label">Kaldığın yerden devam et</div>
+    <div class="db-resume-label">{{ __('Continue where you left off') }}</div>
     <div class="db-resume-val">
-      {{ $suraNames[$setting->last_read_sura] ?? "Sure {$setting->last_read_sura}" }}
-      — Ayet {{ $setting->last_read_aya }}
+      {{ $suraNames[$setting->last_read_sura] ?? (__('Sura prefix') . " {$setting->last_read_sura}") }}
+      — {{ __('verse_ref', ['number' => $setting->last_read_aya]) }}
     </div>
   </div>
   <i class="ti ti-arrow-right db-resume-arrow"></i>
@@ -424,21 +424,21 @@
   {{-- Son çalışılan sureler --}}
   <div class="db-card">
     <div class="db-card-head">
-      <div class="db-card-title"><i class="ti ti-history"></i> Son Çalışılan Sureler</div>
-      <a class="db-card-link" href="{{ route('user.quran-text') }}">Tümünü gör →</a>
+      <div class="db-card-title"><i class="ti ti-history"></i> {{ __('Recently Studied Suras') }}</div>
+      <a class="db-card-link" href="{{ route('user.quran-text') }}">{{ __('See all →') }}</a>
     </div>
     <div class="db-sura-list">
       @forelse($recentSuraNumbers as $suraNum)
         <a class="db-sura-item"
            href="{{ route('user.quran-text') }}?sura={{ $suraNum }}&aya=1">
           <div class="db-sura-num">{{ $suraNum }}</div>
-          <div class="db-sura-name">{{ $suraNames[$suraNum] ?? "Sure {$suraNum}" }}</div>
+          <div class="db-sura-name">{{ $suraNames[$suraNum] ?? (__('Sura prefix') . " {$suraNum}") }}</div>
           @if(($notesPerSura[$suraNum] ?? 0) > 0)
-            <span class="db-sura-count">{{ $notesPerSura[$suraNum] }} not</span>
+            <span class="db-sura-count">{{ $notesPerSura[$suraNum] }} {{ __('note') }}</span>
           @endif
         </a>
       @empty
-        <div class="db-empty">Henüz not alınmış sure yok.</div>
+        <div class="db-empty">{{ __('No suras with notes yet.') }}</div>
       @endforelse
     </div>
   </div>
@@ -446,8 +446,8 @@
   {{-- Etiketler --}}
   <div class="db-card">
     <div class="db-card-head">
-      <div class="db-card-title"><i class="ti ti-tag"></i> Etiketler</div>
-      <a class="db-card-link" href="{{ route('user.quran-notes-range') }}">Notlara git →</a>
+      <div class="db-card-title"><i class="ti ti-tag"></i> {{ __('Tags') }}</div>
+      <a class="db-card-link" href="{{ route('user.quran-notes-range') }}">{{ __('Go to notes →') }}</a>
     </div>
     @if($popularTags->isNotEmpty())
       <div class="db-tag-cloud">
@@ -462,7 +462,7 @@
         @endforeach
       </div>
     @else
-      <div class="db-empty">Henüz etiket oluşturulmadı.</div>
+      <div class="db-empty">{{ __('No tags created yet.') }}</div>
     @endif
   </div>
 
@@ -472,8 +472,8 @@
 @if($recentNotes->isNotEmpty())
 <div class="db-card">
   <div class="db-card-head">
-    <div class="db-card-title"><i class="ti ti-clock"></i> Son Notlar</div>
-    <a class="db-card-link" href="{{ route('user.quran-notes-range') }}">Tümüne bak →</a>
+    <div class="db-card-title"><i class="ti ti-clock"></i> {{ __('Recent Notes') }}</div>
+    <a class="db-card-link" href="{{ route('user.quran-notes-range') }}">{{ __('View all →') }}</a>
   </div>
   <div class="db-note-list">
     @foreach($recentNotes as $note)
@@ -485,9 +485,10 @@
          href="{{ route('user.quran-text') }}?sura={{ $note->sura }}&aya={{ $note->aya }}">
         <span class="db-note-dot {{ $note->type }}"></span>
         <div class="db-note-body">
-          <div class="db-note-title">{{ $label ?: 'Başlıksız not' }}</div>
+          <div class="db-note-title">{{ $label ?: __('Untitled note') }}</div>
           <div class="db-note-ref">
-            {{ $suraNames[$note->sura] ?? "Sure {$note->sura}" }} – Ayet {{ $note->aya }}
+            {{ $suraNames[$note->sura] ?? (__('Sura prefix') . " {$note->sura}") }}
+            – {{ __('verse_ref', ['number' => $note->aya]) }}
           </div>
         </div>
         <i class="ti ti-arrow-right" style="font-size:14px;color:var(--text-light);flex-shrink:0;margin-top:2px;"></i>

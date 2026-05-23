@@ -84,8 +84,8 @@ class ShareLinksPage extends Component
             'editVisibility' => 'required|in:public,private',
             'editExpiry'     => 'nullable|date|after:today',
         ], [
-            'editExpiry.after' => 'Son kullanma tarihi bugünden sonra olmalıdır.',
-            'editExpiry.date'  => 'Geçerli bir tarih girin.',
+            'editExpiry.after' => __('Expiration date must be after today.'),
+            'editExpiry.date'  => __('Please enter a valid date.'),
         ]);
 
         $share = $this->findOwned($this->editingId);
@@ -98,7 +98,7 @@ class ShareLinksPage extends Component
         ]);
 
         $this->closeEdit();
-        $this->flash('Paylaşım güncellendi.');
+        $this->flash(__('Share updated.'));
         unset($this->shares);
     }
 
@@ -109,7 +109,7 @@ class ShareLinksPage extends Component
         if (! $share || $share->isRevoked()) return;
 
         $share->update(['revoked_at' => now()]);
-        $this->flash('Bağlantı erişime kapatıldı.');
+        $this->flash(__('Link access has been disabled.'));
         unset($this->shares);
     }
 
@@ -120,7 +120,7 @@ class ShareLinksPage extends Component
         if (! $share) return;
 
         $share->update(['revoked_at' => null]);
-        $this->flash('Bağlantı yeniden aktif edildi.');
+        $this->flash(__('Link has been reactivated.'));
         unset($this->shares);
     }
 
@@ -142,7 +142,7 @@ class ShareLinksPage extends Component
 
         $share->delete();
         $this->confirmDeleteId = null;
-        $this->flash('Paylaşım silindi.');
+        $this->flash(__('Share deleted.'));
         unset($this->shares);
     }
 

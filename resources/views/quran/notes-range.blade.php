@@ -1,6 +1,6 @@
 @extends('layouts.user-dashboard')
 
-@section('title', "Not Araştırması")
+@section('title', __('Note Research'))
 
 @section('content')
 <livewire:quran-notes-range-page />

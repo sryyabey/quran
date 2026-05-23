@@ -1,6 +1,6 @@
 @extends('layouts.user-dashboard')
 
-@section('title', 'İstatistikler — Suhuf')
+@section('title', __('Statistics') . ' — Suhuf')
 
 @section('content')
   @livewire('statistics-page')

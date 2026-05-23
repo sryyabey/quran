@@ -1,6 +1,6 @@
 @extends('layouts.user-dashboard')
 
-@section('title', "Kur'an Metni")
+@section('title', __('Quran Text'))
 
 @section('content')
 <livewire:quran-text-page />

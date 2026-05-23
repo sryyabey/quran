@@ -1,6 +1,6 @@
 @extends('layouts.user-dashboard')
 
-@section('title', "Kur'an Okuma")
+@section('title', __('Quran Reading'))
 
 @section('content')
 <livewire:quran-paged-read-page />

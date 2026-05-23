@@ -249,15 +249,15 @@
   {{-- ── Page header ─────────────────────────────────────────────────── --}}
   <div class="qpr-header">
     <div>
-      <h1 class="qpr-title">Kur'an Okuma</h1>
-      <p class="qpr-sub">Sure, ayet ve sayfa seçimi ile mushaf görünümünde okuma</p>
+      <h1 class="qpr-title">{{ __('Quran Reading') }}</h1>
+      <p class="qpr-sub">{{ __('qr_subtitle') }}</p>
     </div>
   </div>
 
   {{-- ── Toolbar ──────────────────────────────────────────────────────── --}}
   <div class="qpr-toolbar">
     <label class="qpr-field">
-      <span class="qpr-label">Sure</span>
+      <span class="qpr-label">{{ __('Sura') }}</span>
       <select wire:model.live="selectedSura" class="qpr-select">
         @foreach ($suraOptions as $opt)
           <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
@@ -265,7 +265,7 @@
       </select>
     </label>
     <label class="qpr-field">
-      <span class="qpr-label">Ayet</span>
+      <span class="qpr-label">{{ __('Verse') }}</span>
       <select wire:model.live="selectedAya" class="qpr-select">
         @foreach ($ayaOptions as $opt)
           <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
@@ -273,10 +273,10 @@
       </select>
     </label>
     <label class="qpr-field">
-      <span class="qpr-label">Sayfa</span>
+      <span class="qpr-label">{{ __('Page') }}</span>
       <select wire:model.live="selectedPage" class="qpr-select">
         @foreach ($pageOptions as $p)
-          <option value="{{ $p }}">{{ $p }}. Sayfa</option>
+          <option value="{{ $p }}">{{ __('page_ref', ['number' => $p]) }}</option>
         @endforeach
       </select>
     </label>
@@ -286,16 +286,16 @@
   <div class="qpr-bookmarks">
     <div class="qpr-bookmarks-head">
       <div class="qpr-bookmarks-title">
-        <i class="ti ti-bookmark"></i> Yer İmleri
+        <i class="ti ti-bookmark"></i> {{ __('Bookmarks') }}
       </div>
       <div class="qpr-bookmark-form">
-        <input type="text" wire:model="bookmarkLabel" class="qpr-bookmark-input" placeholder="Etiket (isteğe bağlı)">
+        <input type="text" wire:model="bookmarkLabel" class="qpr-bookmark-input" placeholder="{{ __('Label (optional)') }}">
         <button type="button" wire:click="addBookmark" class="qpr-bookmark-btn">
-          <i class="ti ti-bookmark-plus"></i> Bu Sayfayı Kaydet
+          <i class="ti ti-bookmark-plus"></i> {{ __('Save This Page') }}
         </button>
         @if($this->isCurrentPageBookmarked)
           <button type="button" wire:click="removeBookmark({{ $selectedPage }})" class="qpr-bookmark-btn alt">
-            <i class="ti ti-bookmark-off"></i> Yer İmini Kaldır
+            <i class="ti ti-bookmark-off"></i> {{ __('Remove Bookmark') }}
           </button>
         @endif
       </div>
@@ -304,12 +304,12 @@
       @forelse ($this->bookmarks as $bm)
         <div class="qpr-bookmark-pill">
           <button type="button" class="qpr-bookmark-go" wire:click="$set('selectedPage', {{ $bm->page }})">
-            Sayfa {{ $bm->page }}@if($bm->label) · {{ $bm->label }}@endif
+            {{ __('page_ref', ['number' => $bm->page]) }}@if($bm->label) · {{ $bm->label }}@endif
           </button>
-          <button type="button" class="qpr-bookmark-del" wire:click="removeBookmark({{ $bm->page }})" title="Kaldır">×</button>
+          <button type="button" class="qpr-bookmark-del" wire:click="removeBookmark({{ $bm->page }})" title="{{ __('Remove') }}">×</button>
         </div>
       @empty
-        <span class="qprm-empty" style="font-size:12px;">Henüz yer imi yok.</span>
+        <span class="qprm-empty" style="font-size:12px;">{{ __('No bookmarks yet.') }}</span>
       @endforelse
     </div>
   </div>
@@ -321,7 +321,7 @@
     wire:target="selectedPage,prevPage,nextPage,selectedSura,selectedAya"
   >
     <div class="qpr-page-head">
-      <span class="qpr-page-num">{{ $selectedPage }}. Sayfa</span>
+      <span class="qpr-page-num">{{ __('page_ref', ['number' => $selectedPage]) }}</span>
       @php $firstRow = $rows->first(); $lastRow = $rows->last(); @endphp
       @if($firstRow && $lastRow)
         <span class="qpr-page-range">
@@ -344,7 +344,7 @@
           <div class="qpr-sura-sep" aria-hidden="true">
             <div class="qpr-sura-sep-line">
               <span class="qpr-sura-sep-orn">✦</span>
-              <span class="qpr-sura-sep-text">{{ $row['sura'] }}. Sure Baslangici</span>
+              <span class="qpr-sura-sep-text">{{ __('sura_start_label', ['number' => $row['sura']]) }}</span>
               <span class="qpr-sura-sep-orn">✦</span>
             </div>
           </div>
@@ -369,17 +369,17 @@
           </button>
         </span>
       @empty
-        <p class="qprm-empty"><i class="ti ti-mood-empty"></i> Bu sayfada ayet bulunamadı.</p>
+        <p class="qprm-empty"><i class="ti ti-mood-empty"></i> {{ __('No verses found on this page.') }}</p>
       @endforelse
     </div>
 
     <div class="qpr-nav">
       <button type="button" class="qpr-nav-btn" wire:click="prevPage" wire:loading.attr="disabled" wire:target="prevPage">
-        <span wire:loading.remove wire:target="prevPage"><i class="ti ti-arrow-left"></i> Önceki Sayfa</span>
+        <span wire:loading.remove wire:target="prevPage"><i class="ti ti-arrow-left"></i> {{ __('Previous Page') }}</span>
         <span wire:loading wire:target="prevPage">…</span>
       </button>
       <button type="button" class="qpr-nav-btn" wire:click="nextPage" wire:loading.attr="disabled" wire:target="nextPage">
-        <span wire:loading.remove wire:target="nextPage">Sonraki Sayfa <i class="ti ti-arrow-right"></i></span>
+        <span wire:loading.remove wire:target="nextPage">{{ __('Next Page') }} <i class="ti ti-arrow-right"></i></span>
         <span wire:loading wire:target="nextPage">…</span>
       </button>
     </div>
@@ -388,7 +388,7 @@
   {{-- ── Notes modal ──────────────────────────────────────────────────── --}}
   @if($showNotesModal)
     @php
-      $typeLabels = ['note' => 'Not', 'footnote' => 'Dipnot', 'research' => 'Araştırma'];
+      $typeLabels = ['note' => __('Note'), 'footnote' => __('Footnote'), 'research' => __('Research')];
       $noteCount  = $this->modalNotes->count();
     @endphp
 
@@ -404,10 +404,10 @@
         <div class="qprm-head">
           <div class="qprm-title">
             <i class="ti ti-notes" style="font-size:16px;color:var(--teal-mid);"></i>
-            {{ $SURA_NAMES[$modalSura] ?? "Sure {$modalSura}" }}
+            {{ $SURA_NAMES[$modalSura] ?? (__('Sura prefix') . " {$modalSura}") }}
             <span class="qprm-ref">{{ $modalSura }}:{{ $modalAya }}</span>
           </div>
-          <button type="button" class="qprm-close" wire:click="closeNotesModal" aria-label="Kapat">
+          <button type="button" class="qprm-close" wire:click="closeNotesModal" aria-label="{{ __('Close') }}">
             <i class="ti ti-x"></i>
           </button>
         </div>
@@ -431,7 +431,7 @@
             wire:click="switchTab('notes')"
           >
             <i class="ti ti-list"></i>
-            Notlar
+            {{ __('Notes') }}
             @if($noteCount > 0)
               <span class="qprm-tab-badge">{{ $noteCount }}</span>
             @endif
@@ -442,7 +442,7 @@
             wire:click="switchTab('add')"
           >
             <i class="ti ti-plus"></i>
-            Not Ekle
+            {{ __('Add Note') }}
           </button>
         </div>
 
@@ -462,7 +462,7 @@
 
                 @if(!is_null($note->word_position) && ($this->modalWordTexts[$note->id] ?? null))
                   <div class="qprm-word-chip">
-                    <div class="qprm-word-chip-label">İlgili Kelime</div>
+                    <div class="qprm-word-chip-label">{{ __('Related Word') }}</div>
                     <div class="qprm-word-chip-ar">{{ $this->modalWordTexts[$note->id] }}</div>
                   </div>
                 @endif
@@ -480,7 +480,7 @@
             @empty
               <div class="qprm-empty">
                 <i class="ti ti-mood-empty"></i>
-                Bu ayete bağlı not bulunamadı.
+                {{ __('No notes found for this verse.') }}
               </div>
             @endforelse
           </div>
@@ -492,24 +492,24 @@
 
               {{-- Type --}}
               <div class="qprm-form-row">
-                <label class="qprm-form-label">Not Tipi</label>
+                <label class="qprm-form-label">{{ __('Note Type') }}</label>
                 <div class="qprm-type-row">
                   <label class="qprm-type-opt">
                     <input type="radio" wire:model="newNoteType" value="note">
                     <span class="qprm-type-btn t-note">
-                      <i class="ti ti-pencil" style="font-size:13px;"></i> Not
+                      <i class="ti ti-pencil" style="font-size:13px;"></i> {{ __('Note') }}
                     </span>
                   </label>
                   <label class="qprm-type-opt">
                     <input type="radio" wire:model="newNoteType" value="footnote">
                     <span class="qprm-type-btn t-footnote">
-                      <i class="ti ti-bookmark" style="font-size:13px;"></i> Dipnot
+                      <i class="ti ti-bookmark" style="font-size:13px;"></i> {{ __('Footnote') }}
                     </span>
                   </label>
                   <label class="qprm-type-opt">
                     <input type="radio" wire:model="newNoteType" value="research">
                     <span class="qprm-type-btn t-research">
-                      <i class="ti ti-microscope" style="font-size:13px;"></i> Araştırma
+                      <i class="ti ti-microscope" style="font-size:13px;"></i> {{ __('Research') }}
                     </span>
                   </label>
                 </div>
@@ -517,22 +517,22 @@
 
               {{-- Title --}}
               <div class="qprm-form-row">
-                <label class="qprm-form-label">Başlık <span style="font-weight:400;text-transform:none;letter-spacing:0;">(isteğe bağlı)</span></label>
+                <label class="qprm-form-label">{{ __('Title') }} <span style="font-weight:400;text-transform:none;letter-spacing:0;">{{ __('(optional)') }}</span></label>
                 <input
                   type="text"
                   wire:model="newNoteTitle"
                   class="qprm-form-input"
-                  placeholder="Not başlığı..."
+                  placeholder="{{ __('Note title...') }}"
                 >
               </div>
 
               {{-- Content --}}
               <div class="qprm-form-row">
-                <label class="qprm-form-label">İçerik <span style="color:#c0392b;">*</span></label>
+                <label class="qprm-form-label">{{ __('Content') }} <span style="color:#c0392b;">*</span></label>
                 <textarea
                   wire:model="newNoteContent"
                   class="qprm-form-textarea"
-                  placeholder="Notunuzu buraya yazın..."
+                  placeholder="{{ __('Write your note here...') }}"
                   rows="4"
                 ></textarea>
                 @error('newNoteContent')
@@ -543,12 +543,12 @@
               {{-- Word position --}}
               @if($this->modalWords->isNotEmpty())
                 <div class="qprm-form-row">
-                  <label class="qprm-form-label">İlgili Kelime <span style="font-weight:400;text-transform:none;letter-spacing:0;">(isteğe bağlı)</span></label>
+                  <label class="qprm-form-label">{{ __('Related Word') }} <span style="font-weight:400;text-transform:none;letter-spacing:0;">{{ __('(optional)') }}</span></label>
                   <select wire:model="newNoteWordPos" class="qprm-form-select">
-                    <option value="">— Ayet geneli —</option>
+                    <option value="">{{ __('— Whole verse —') }}</option>
                     @foreach($this->modalWords as $word)
                       <option value="{{ $word->position }}">
-                        {{ $word->text }}  ({{ $word->position }}. kelime)
+                        {{ $word->text }}  ({{ __('word_ref', ['number' => $word->position]) }})
                       </option>
                     @endforeach
                   </select>
@@ -558,7 +558,7 @@
               {{-- Tags --}}
               @if($this->userTags->isNotEmpty() || true)
                 <div class="qprm-form-row">
-                  <label class="qprm-form-label">Etiketler</label>
+                  <label class="qprm-form-label">{{ __('Tags') }}</label>
                   @if($this->userTags->isNotEmpty())
                     <div class="qprm-tag-grid">
                       @foreach($this->userTags as $tag)
@@ -582,7 +582,7 @@
                       wire:keydown.enter.prevent="createAndAttachTag"
                       class="qprm-form-input"
                       style="flex:1;"
-                      placeholder="Yeni etiket oluştur..."
+                      placeholder="{{ __('Create new tag...') }}"
                     >
                     <button
                       type="button"
@@ -590,7 +590,7 @@
                       class="qpr-bookmark-btn"
                       style="white-space:nowrap;"
                     >
-                      <i class="ti ti-plus"></i> Ekle
+                      <i class="ti ti-plus"></i> {{ __('Add') }}
                     </button>
                   </div>
                 </div>
@@ -605,9 +605,9 @@
                 class="qprm-save-btn"
               >
                 <span wire:loading.remove wire:target="saveNote">
-                  <i class="ti ti-device-floppy"></i> Notu Kaydet
+                  <i class="ti ti-device-floppy"></i> {{ __('Save Note') }}
                 </span>
-                <span wire:loading wire:target="saveNote">Kaydediliyor…</span>
+                <span wire:loading wire:target="saveNote">{{ __('Saving…') }}</span>
               </button>
 
             </div>
@@ -621,7 +621,7 @@
             class="qprm-goto"
           >
             <i class="ti ti-external-link"></i>
-            Not düzenleme sayfasında aç
+            {{ __('Open in note editing page') }}
           </a>
         </div>
 

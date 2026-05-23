@@ -1,6 +1,6 @@
 @extends('layouts.user-dashboard')
 
-@section('title', 'Ayarlar')
+@section('title', __('Settings'))
 
 @section('content')
 <livewire:user-settings-page />

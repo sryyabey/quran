@@ -11,11 +11,6 @@ use Livewire\Component;
 
 class StatisticsPage extends Component
 {
-    private const MONTHS_TR = [
-        1 => 'Oca', 2 => 'Şub',  3 => 'Mar', 4  => 'Nis',
-        5 => 'May', 6 => 'Haz',  7 => 'Tem', 8  => 'Ağu',
-        9 => 'Eyl', 10 => 'Eki', 11 => 'Kas', 12 => 'Ara',
-    ];
 
     /* ── Özet sayılar ─────────────────────────────────────────────── */
 
@@ -84,9 +79,9 @@ class StatisticsPage extends Component
             ->map(fn ($r) => [
                 'type'    => $r->type,
                 'label'   => match ($r->type) {
-                    'note'     => 'Not',
-                    'footnote' => 'Dipnot',
-                    'research' => 'Araştırma',
+                    'note'     => __('Note'),
+                    'footnote' => __('Footnote'),
+                    'research' => __('Research'),
                     default    => $r->type,
                 },
                 'count'   => $r->count,
@@ -127,7 +122,7 @@ class StatisticsPage extends Component
             $count   = $dailyCounts[$dateStr] ?? 0;
 
             if ($current->day === 1) {
-                $weeks[$weekIdx]['month_label'] = self::MONTHS_TR[$current->month];
+                $weeks[$weekIdx]['month_label'] = $current->copy()->locale(app()->getLocale())->translatedFormat('M');
             }
 
             $weeks[$weekIdx]['days'][] = [

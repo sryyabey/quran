@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="UTF-8">
@@ -321,12 +321,30 @@
             font-size: 13px;
             font-weight: 600;
             color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .user-role {
-            font-family: 'Cairo', sans-serif;
-            font-size: 10px;
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
             color: var(--text-light);
+            font-size: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all .15s;
+        }
+        .logout-btn:hover {
+            background: #fff2f2;
+            border-color: #fca5a5;
+            color: #dc2626;
         }
 
         .main {
@@ -528,47 +546,112 @@
             <div class="topbar-right">
                 @livewire('global-search')
                 @livewire('notification-bell')
-                <a class="topbar-icon-btn" href="{{ route('user.settings') }}" title="Ayarlar"
+
+                {{-- Language Switcher --}}
+                <div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:3px;">
+                    <a href="{{ route('locale.switch', 'tr') }}"
+                       style="font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;text-decoration:none;transition:all .15s;{{ app()->getLocale()==='tr' ? 'background:rgba(255,255,255,.2);color:#fff;' : 'color:rgba(255,255,255,.4);' }}">TR</a>
+                    <a href="{{ route('locale.switch', 'en') }}"
+                       style="font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;text-decoration:none;transition:all .15s;{{ app()->getLocale()==='en' ? 'background:rgba(255,255,255,.2);color:#fff;' : 'color:rgba(255,255,255,.4);' }}">EN</a>
+                </div>
+
+                <a class="topbar-icon-btn" href="{{ route('user.settings') }}" title="{{ __('Settings') }}"
                     style="text-decoration:none;"><i class="ti ti-settings" aria-hidden="true"></i></a>
-                <div class="avatar" title="Profil">{{ $initials }}</div>
+                <div
+                    x-data="{
+                        open: false,
+                        top: 0, right: 0,
+                        updatePos() {
+                            const r = this.$refs.btn.getBoundingClientRect();
+                            this.top   = r.bottom + 8;
+                            this.right = window.innerWidth - r.right;
+                        },
+                        toggle() { this.updatePos(); this.open = !this.open; }
+                    }"
+                    @click.outside="open = false"
+                    style="position:relative;"
+                >
+                    <div
+                        x-ref="btn"
+                        class="avatar"
+                        @click="toggle()"
+                        style="cursor:pointer;"
+                        title="{{ __('Profile') }}"
+                    >{{ $initials }}</div>
+
+                    <div
+                        x-show="open"
+                        x-transition
+                        @click.outside="open = false"
+                        :style="`position:fixed; top:${top}px; right:${right}px; z-index:9999;`"
+                        style="display:none; min-width:200px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,.12); overflow:hidden;"
+                    >
+                        <div style="padding:12px 14px; border-bottom:1px solid var(--border);">
+                            <div style="font-family:'Cairo',sans-serif; font-size:13px; font-weight:700; color:var(--text-dark);">{{ $name }}</div>
+                            <div style="font-family:'Cairo',sans-serif; font-size:11px; color:var(--text-light); margin-top:1px;">{{ auth()->user()?->email }}</div>
+                        </div>
+                        <div style="padding:6px;">
+                            <a
+                                href="{{ route('user.settings') }}"
+                                style="display:flex; align-items:center; gap:8px; padding:9px 10px; border-radius:8px; font-family:'Cairo',sans-serif; font-size:13px; font-weight:600; color:var(--text-mid); text-decoration:none; transition:background .12s;"
+                                onmouseover="this.style.background='var(--cream2)'" onmouseout="this.style.background=''"
+                            >
+                                <i class="ti ti-settings" style="font-size:16px;"></i> {{ __('Settings') }}
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button
+                                    type="submit"
+                                    style="display:flex; align-items:center; gap:8px; width:100%; padding:9px 10px; border-radius:8px; font-family:'Cairo',sans-serif; font-size:13px; font-weight:600; color:#dc2626; background:none; border:none; cursor:pointer; transition:background .12s; text-align:left;"
+                                    onmouseover="this.style.background='#fff2f2'" onmouseout="this.style.background=''"
+                                >
+                                    <i class="ti ti-logout" style="font-size:16px;"></i> {{ __('Sign Out') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
-        <nav class="sidebar" aria-label="Ana gezinti">
+        <nav class="sidebar" aria-label="{{ __('Main navigation') }}">
             <div class="sidebar-scroll">
                 <div class="nav-section">
-                    <div class="nav-section-label">Ana Menu</div>
+                    <div class="nav-section-label">{{ __('Main Menu') }}</div>
                     <a class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}"
                         href="{{ route('user.dashboard') }}"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>
-                        Genel Bakis</a>
+                        {{ __('Overview') }}</a>
                     <a class="nav-item {{ request()->routeIs('user.quran-read') ? 'active' : '' }}"
-                        href="{{ route('user.quran-read') }}"><i class="ti ti-book-2" aria-hidden="true"></i> Kur'an
-                        Okuma</a>
+                        href="{{ route('user.quran-read') }}"><i class="ti ti-book-2" aria-hidden="true"></i>
+                        {{ __('Quran Reading') }}</a>
                     <a class="nav-item {{ request()->routeIs('user.quran-text') ? 'active' : '' }}"
-                        href="{{ route('user.quran-text') }}"><i class="ti ti-book" aria-hidden="true"></i> Kur'an
-                        Metni</a>
+                        href="{{ route('user.quran-text') }}"><i class="ti ti-book" aria-hidden="true"></i>
+                        {{ __('Quran Text') }}</a>
                     <a class="nav-item {{ request()->routeIs('user.quran-notes-range') ? 'active' : '' }}"
                         href="{{ route('user.quran-notes-range') }}"><i class="ti ti-notebook" aria-hidden="true"></i>
-                        Not Araştırması</a>
+                        {{ __('Note Research') }}</a>
                     <a class="nav-item {{ request()->routeIs('user.shares') ? 'active' : '' }}"
                         href="{{ route('user.shares') }}"><i class="ti ti-link" aria-hidden="true"></i>
-                        Paylaşımlarım</a>
+                        {{ __('My Shares') }}</a>
                     <a class="nav-item {{ request()->routeIs('user.statistics') ? 'active' : '' }}"
                         href="{{ route('user.statistics') }}"><i class="ti ti-chart-bar" aria-hidden="true"></i>
-                        İstatistikler</a>
+                        {{ __('Statistics') }}</a>
                     <a class="nav-item {{ request()->routeIs('user.settings') ? 'active' : '' }}"
                         href="{{ route('user.settings') }}"><i class="ti ti-settings" aria-hidden="true"></i>
-                        Ayarlar</a>
+                        {{ __('Settings') }}</a>
                 </div>
             </div>
 
             <div class="sidebar-footer">
                 <div class="user-card">
                     <div class="user-avatar">{{ $initials }}</div>
-                    <div>
-                        <div class="user-name">{{ $name }}</div>
-                        <div class="user-role">Arastirmaci · User</div>
-                    </div>
+                    <div class="user-name" style="flex:1;">{{ $name }}</div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="logout-btn" title="{{ __('Sign Out') }}">
+                            <i class="ti ti-logout"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
 

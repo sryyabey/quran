@@ -340,12 +340,12 @@
 <div class="sl-toolbar">
   <span class="sl-toolbar-title">
     <i class="ti ti-link"></i>
-    Paylaşım Bağlantılarım
+    {{ __('My Share Links') }}
   </span>
 
   {{-- Filtre --}}
   <div class="sl-filter-group">
-    @foreach(['all' => 'Tümü', 'active' => 'Aktif', 'expired' => 'Süresi Dolmuş', 'revoked' => 'İptal'] as $val => $label)
+    @foreach(['all' => __('All'), 'active' => __('Active'), 'expired' => __('Expired'), 'revoked' => __('Revoked')] as $val => $label)
       <button
         type="button"
         wire:click="$set('filterStatus', '{{ $val }}')"
@@ -356,15 +356,15 @@
 
   {{-- Sırala --}}
   <select class="sl-sort" wire:model.live="sortBy">
-    <option value="new">Yeniden eskiye</option>
-    <option value="old">Eskiden yeniye</option>
-    <option value="views">En çok görüntülenen</option>
+    <option value="new">{{ __('Newest first') }}</option>
+    <option value="old">{{ __('Oldest first') }}</option>
+    <option value="views">{{ __('Most viewed') }}</option>
   </select>
 
   {{-- Yeni paylaşım için not araştırmasına yönlendir --}}
   <a href="{{ route('user.quran-notes-range') }}" class="sl-new-btn">
     <i class="ti ti-plus" style="font-size:14px;"></i>
-    Yeni Paylaşım
+    {{ __('New Share') }}
   </a>
 </div>
 
@@ -378,7 +378,7 @@
     $cardClass  = $isRevoked ? 'is-revoked' : ($isExpired ? 'is-expired' : '');
     $stripClass = $isRevoked ? 'revoked' : ($isExpired ? 'expired' : 'active');
 
-    $statusLabel = $isRevoked ? 'İptal Edildi' : ($isExpired ? 'Süresi Doldu' : 'Aktif');
+    $statusLabel = $isRevoked ? __('Revoked') : ($isExpired ? __('Expired') : __('Active'));
     $statusIcon  = $isRevoked ? 'ti-ban' : ($isExpired ? 'ti-clock-x' : 'ti-circle-check');
     $statusClass = $isRevoked ? 'revoked' : ($isExpired ? 'expired' : 'active');
 
@@ -402,14 +402,14 @@
       <div class="sl-card-top">
         <div>
           <div class="sl-card-title">
-            {{ $share->title ?: 'İsimsiz Paylaşım' }}
+            {{ $share->title ?: __('Untitled Share') }}
             @if(!$share->title)
-              <span>(başlık yok)</span>
+              <span>({{ __('no title') }})</span>
             @endif
           </div>
           <div class="sl-payload-peek">
             <i class="ti ti-book-2" style="font-size:10px;"></i>
-            {{ $suraCount }} sure · {{ $totalNotes }} not
+            {{ $suraCount }} {{ __('suras') }} · {{ $totalNotes }} {{ __('notes') }}
             @if($rangeText) · {{ $rangeText }} @endif
           </div>
         </div>
@@ -431,7 +431,7 @@
           @click="copyUrl('{{ $share->token }}', {{ $share->id }})"
         >
           <i class="ti" :class="copied === {{ $share->id }} ? 'ti-check' : 'ti-copy'" style="font-size:12px;"></i>
-          <span x-text="copied === {{ $share->id }} ? 'Kopyalandı!' : 'Kopyala'">Kopyala</span>
+          <span x-text="copied === {{ $share->id }} ? '{{ __('Copied!') }}' : '{{ __('Copy') }}'">{{ __('Copy') }}</span>
         </button>
       </div>
 
@@ -440,39 +440,39 @@
         {{-- Görünürlük --}}
         <span class="sl-chip {{ $share->visibility === 'public' ? 'vis-public' : 'vis-private' }}">
           <i class="ti {{ $share->visibility === 'public' ? 'ti-world' : 'ti-lock' }}"></i>
-          {{ $share->visibility === 'public' ? 'Herkese açık' : 'Özel' }}
+          {{ $share->visibility === 'public' ? __('Public') : __('Private') }}
         </span>
 
         {{-- Görüntülenme --}}
         <span class="sl-chip">
           <i class="ti ti-eye"></i>
-          {{ number_format($share->access_count) }} görüntülenme
+          {{ number_format($share->access_count) }} {{ __('views') }}
         </span>
 
         {{-- Son erişim --}}
         @if($share->last_accessed_at)
           <span class="sl-chip">
             <i class="ti ti-clock"></i>
-            Son: {{ $share->last_accessed_at->locale('tr')->diffForHumans() }}
+            {{ __('Last') }}: {{ $share->last_accessed_at->locale(app()->getLocale())->diffForHumans() }}
           </span>
         @endif
 
         {{-- Oluşturulma --}}
         <span class="sl-chip">
           <i class="ti ti-calendar-plus"></i>
-          {{ $share->created_at->locale('tr')->isoFormat('D MMM Y') }}
+          {{ $share->created_at->locale(app()->getLocale())->isoFormat('D MMM Y') }}
         </span>
 
         {{-- Son kullanma --}}
         @if($share->expires_at)
           <span class="sl-chip {{ $isExpired ? 'warn' : '' }}">
             <i class="ti {{ $isExpired ? 'ti-clock-x' : 'ti-calendar-event' }}"></i>
-            {{ $isExpired ? 'Doldu:' : 'Son:' }} {{ $share->expires_at->locale('tr')->isoFormat('D MMM Y') }}
+            {{ $isExpired ? __('Expired:') : __('Ends:') }} {{ $share->expires_at->locale(app()->getLocale())->isoFormat('D MMM Y') }}
           </span>
         @else
           <span class="sl-chip">
             <i class="ti ti-infinity"></i>
-            Süresiz
+            {{ __('No expiration') }}
           </span>
         @endif
       </div>
@@ -481,34 +481,34 @@
       <div class="sl-actions">
         {{-- Düzenle --}}
         <button type="button" class="sl-btn sl-btn-edit" wire:click="openEdit({{ $share->id }})">
-          <i class="ti ti-pencil" style="font-size:12px;"></i> Düzenle
+          <i class="ti ti-pencil" style="font-size:12px;"></i> {{ __('Edit') }}
         </button>
 
         {{-- Görünürlük toggle --}}
         <button type="button" class="sl-btn sl-btn-vis" wire:click="toggleVisibility({{ $share->id }})">
           <i class="ti {{ $share->visibility === 'public' ? 'ti-lock' : 'ti-world' }}" style="font-size:12px;"></i>
-          {{ $share->visibility === 'public' ? 'Özel yap' : 'Herkese aç' }}
+          {{ $share->visibility === 'public' ? __('Make private') : __('Make public') }}
         </button>
 
         {{-- Revoke / Restore --}}
         @if($isRevoked)
           <button type="button" class="sl-btn sl-btn-restore" wire:click="restore({{ $share->id }})">
-            <i class="ti ti-refresh" style="font-size:12px;"></i> Yeniden Aktif Et
+            <i class="ti ti-refresh" style="font-size:12px;"></i> {{ __('Reactivate') }}
           </button>
         @elseif($isActive)
           <button type="button" class="sl-btn sl-btn-revoke" wire:click="revoke({{ $share->id }})">
-            <i class="ti ti-ban" style="font-size:12px;"></i> Erişimi Kapat
+            <i class="ti ti-ban" style="font-size:12px;"></i> {{ __('Disable Access') }}
           </button>
         @endif
 
         {{-- Aç --}}
         <a href="{{ $shareUrl }}" target="_blank" class="sl-btn sl-btn-open">
-          <i class="ti ti-external-link" style="font-size:12px;"></i> Aç
+          <i class="ti ti-external-link" style="font-size:12px;"></i> {{ __('Open') }}
         </a>
 
         {{-- Sil --}}
         <button type="button" class="sl-btn sl-btn-del" wire:click="confirmDelete({{ $share->id }})">
-          <i class="ti ti-trash" style="font-size:12px;"></i> Sil
+          <i class="ti ti-trash" style="font-size:12px;"></i> {{ __('Delete') }}
         </button>
       </div>
 
@@ -516,9 +516,9 @@
       @if($confirmDeleteId === $share->id)
         <div class="sl-confirm-del">
           <i class="ti ti-alert-triangle" style="font-size:15px;"></i>
-          <strong>Bu paylaşım kalıcı olarak silinecek. Emin misiniz?</strong>
-          <button class="sl-btn-del-yes" wire:click="delete()">Evet, Sil</button>
-          <button class="sl-btn-del-no"  wire:click="cancelDelete()">İptal</button>
+          <strong>{{ __('This share will be permanently deleted. Are you sure?') }}</strong>
+          <button class="sl-btn-del-yes" wire:click="delete()">{{ __('Yes, Delete') }}</button>
+          <button class="sl-btn-del-no"  wire:click="cancelDelete()">{{ __('Cancel') }}</button>
         </div>
       @endif
 
@@ -530,17 +530,17 @@
     <div class="sl-empty-icon"><i class="ti ti-link-off"></i></div>
     <div class="sl-empty-title">
       @if($filterStatus === 'all')
-        Henüz paylaşım oluşturmadınız
+        {{ __('You have not created any shares yet') }}
       @elseif($filterStatus === 'active')
-        Aktif paylaşım yok
+        {{ __('No active shares') }}
       @elseif($filterStatus === 'expired')
-        Süresi dolmuş paylaşım yok
+        {{ __('No expired shares') }}
       @else
-        İptal edilmiş paylaşım yok
+        {{ __('No revoked shares') }}
       @endif
     </div>
     <div class="sl-empty-sub">
-      Not araştırması sayfasından notlarınızı paylaşabilirsiniz.
+      {{ __('You can share your notes from the note research page.') }}
     </div>
   </div>
 @endforelse
@@ -552,7 +552,7 @@
 
       <div class="sl-modal-head">
         <i class="ti ti-pencil" style="font-size:17px;color:var(--teal-mid);"></i>
-        <span class="sl-modal-title">Paylaşımı Düzenle</span>
+        <span class="sl-modal-title">{{ __('Edit Share') }}</span>
         <button type="button" class="sl-modal-close" wire:click="closeEdit">
           <i class="ti ti-x"></i>
         </button>
@@ -562,11 +562,11 @@
 
         {{-- Başlık --}}
         <div class="sl-field">
-          <label class="sl-label">Başlık <span style="font-weight:400;color:var(--text-light);">(isteğe bağlı)</span></label>
+          <label class="sl-label">{{ __('Title') }} <span style="font-weight:400;color:var(--text-light);">({{ __('optional') }})</span></label>
           <input
             type="text"
             class="sl-input @error('editTitle') error @enderror"
-            placeholder="Paylaşım için açıklayıcı bir başlık..."
+            placeholder="{{ __('A descriptive title for the share...') }}"
             wire:model="editTitle"
             maxlength="160"
           >
@@ -577,24 +577,24 @@
 
         {{-- Görünürlük --}}
         <div class="sl-field">
-          <label class="sl-label">Görünürlük</label>
+          <label class="sl-label">{{ __('Visibility') }}</label>
           <div class="sl-radio-group">
             <label class="sl-radio-opt">
               <input type="radio" wire:model="editVisibility" value="public">
               <i class="ti ti-world"></i>
-              Herkese açık
+              {{ __('Public') }}
             </label>
             <label class="sl-radio-opt">
               <input type="radio" wire:model="editVisibility" value="private">
               <i class="ti ti-lock"></i>
-              Yalnızca ben
+              {{ __('Only me') }}
             </label>
           </div>
         </div>
 
         {{-- Son kullanma tarihi --}}
         <div class="sl-field">
-          <label class="sl-label">Son Kullanma Tarihi <span style="font-weight:400;color:var(--text-light);">(boş = süresiz)</span></label>
+          <label class="sl-label">{{ __('Expiration Date') }} <span style="font-weight:400;color:var(--text-light);">({{ __('empty = no expiration') }})</span></label>
           <input
             type="date"
             class="sl-input @error('editExpiry') error @enderror"
@@ -609,10 +609,10 @@
       </div>
 
       <div class="sl-modal-foot">
-        <button type="button" class="sl-btn-cancel" wire:click="closeEdit">İptal</button>
+        <button type="button" class="sl-btn-cancel" wire:click="closeEdit">{{ __('Cancel') }}</button>
         <button type="button" class="sl-btn-save" wire:click="saveEdit">
           <i class="ti ti-check" style="font-size:13px;"></i>
-          Kaydet
+          {{ __('Save') }}
         </button>
       </div>
 
