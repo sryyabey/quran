@@ -8,7 +8,6 @@ use App\Models\ResearchTag;
 use App\Models\UserMealPreference;
 use App\Models\UserSetting;
 use App\Models\VerseTranslation;
-use App\Services\TafsirService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -69,12 +68,6 @@ class QuranTextPage extends Component
 
     public bool $resumed = false;
 
-    /* ── Tefsir ───────────────────────────────────────────────────── */
-    public ?int    $preferredTafsirId   = null;
-    public ?string $preferredTafsirName = null;
-    public bool    $tafsirOpen          = false;
-    public ?string $tafsirText          = null;
-
     public function mount(): void
     {
         $user    = auth()->user();
@@ -121,8 +114,6 @@ class QuranTextPage extends Component
         $this->loadPreferredMealsForLanguage();
         $this->syncSelectedMeal();
 
-        $this->preferredTafsirId   = $setting?->preferred_tafsir_id;
-        $this->preferredTafsirName = $setting?->preferred_tafsir_name;
     }
 
     public function prevAya(): void
@@ -198,14 +189,12 @@ class QuranTextPage extends Component
         $this->syncAya();
         $this->resetNoteForm();
         $this->saveReadingPosition();
-        $this->resetTafsir();
     }
 
     public function updatedSelectedAya(): void
     {
         $this->resetNoteForm();
         $this->saveReadingPosition();
-        $this->resetTafsir();
     }
 
     public function updatedSelectedLanguage(): void
@@ -381,22 +370,6 @@ class QuranTextPage extends Component
 
         if ($this->editingNoteId === $noteId) {
             $this->resetNoteForm();
-        }
-    }
-
-    /* ── Tefsir ───────────────────────────────────────────────────── */
-
-    public function toggleTafsir(): void
-    {
-        if (! $this->preferredTafsirId || ! $this->selectedSura || ! $this->selectedAya) {
-            return;
-        }
-
-        $this->tafsirOpen = ! $this->tafsirOpen;
-
-        if ($this->tafsirOpen && $this->tafsirText === null) {
-            $this->tafsirText = app(TafsirService::class)
-                ->getAyahTafsir($this->selectedSura, $this->selectedAya, $this->preferredTafsirId);
         }
     }
 
@@ -584,12 +557,6 @@ class QuranTextPage extends Component
     public function render(): View
     {
         return view('livewire.quran-text-page');
-    }
-
-    private function resetTafsir(): void
-    {
-        $this->tafsirOpen = false;
-        $this->tafsirText = null;
     }
 
     private function syncAya(): void
