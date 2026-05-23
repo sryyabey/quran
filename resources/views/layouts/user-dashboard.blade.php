@@ -553,6 +553,9 @@
                     <a class="nav-item {{ request()->routeIs('user.shares') ? 'active' : '' }}"
                         href="{{ route('user.shares') }}"><i class="ti ti-link" aria-hidden="true"></i>
                         Paylaşımlarım</a>
+                    <a class="nav-item {{ request()->routeIs('user.statistics') ? 'active' : '' }}"
+                        href="{{ route('user.statistics') }}"><i class="ti ti-chart-bar" aria-hidden="true"></i>
+                        İstatistikler</a>
                     <a class="nav-item {{ request()->routeIs('user.settings') ? 'active' : '' }}"
                         href="{{ route('user.settings') }}"><i class="ti ti-settings" aria-hidden="true"></i>
                         Ayarlar</a>
