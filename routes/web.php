@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Share\NoteShareController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,5 @@ Route::middleware(['auth', 'role:user|super_admin'])->group(function (): void {
     Route::view('/kuran-notlar', 'quran.notes-range')->name('user.quran-notes-range');
     Route::view('/ayarlar', 'settings.index')->name('user.settings');
 });
+
+Route::get('/paylas/notlar/{token}', [NoteShareController::class, 'show'])->name('notes.share.show');

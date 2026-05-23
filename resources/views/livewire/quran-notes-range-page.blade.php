@@ -99,6 +99,33 @@
 /* ── Yazdır butonu ──────────────────────────────────── */
 .qnr-print-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 9px; border: 1px solid var(--border-strong); background: #fff; color: var(--text-mid); font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; }
 .qnr-print-btn:hover { background: var(--cream2); color: var(--text-dark); }
+.qnr-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 9px; border: 1px solid rgba(45,155,132,.35); background: var(--teal-light); color: var(--teal-dark); font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s; }
+.qnr-share-btn:hover { background: rgba(45,155,132,.22); }
+
+.qnr-share-modal-backdrop { position: fixed; inset: 0; background: rgba(22,16,8,.55); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 1300; }
+.qnr-share-modal { width: min(700px, 100%); background: #fff; border: 1px solid var(--border-strong); border-radius: 14px; overflow: hidden; }
+.qnr-share-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.qnr-share-title { font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 700; color: var(--teal-dark); margin: 0; }
+.qnr-share-close { border: 1px solid var(--border-strong); background: #fff; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; }
+.qnr-share-body { padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.qnr-share-field { display: flex; flex-direction: column; gap: 5px; }
+.qnr-share-label { font-family: 'Cairo', sans-serif; font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: .45px; }
+.qnr-share-input, .qnr-share-select { border: 1px solid var(--border-strong); border-radius: 8px; padding: 8px 10px; font-family: 'Cairo', sans-serif; font-size: 13px; }
+.qnr-share-actions { padding: 0 16px 14px; display: flex; justify-content: flex-end; }
+.qnr-share-generate { border: 1px solid var(--teal-dark); background: var(--teal-dark); color: #fff; border-radius: 8px; padding: 9px 12px; font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
+.qnr-share-result { padding: 0 16px 16px; }
+.qnr-share-url { width: 100%; border: 1px solid var(--border-strong); border-radius: 8px; padding: 9px 10px; font-family: monospace; font-size: 12px; color: var(--text-dark); background: #fff; }
+.qnr-share-socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.qnr-share-social-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border-strong); border-radius: 8px; padding: 7px 10px; font-family: 'Cairo', sans-serif; font-size: 12px; text-decoration: none; color: var(--text-mid); background: #fff; cursor: pointer; }
+.qnr-share-social-btn:hover { background: var(--cream2); color: var(--text-dark); }
+.qnr-share-social-btn.whatsapp { border-color: rgba(37, 211, 102, .45); color: #1f9f4b; }
+.qnr-share-social-btn.facebook { border-color: rgba(24, 119, 242, .45); color: #1a62c5; }
+.qnr-share-social-btn.instagram { border-color: rgba(225, 48, 108, .38); color: #c13584; }
+.qnr-share-social-btn.copy { border-color: rgba(45,155,132,.35); color: var(--teal-dark); }
+
+@media (max-width: 640px) {
+    .qnr-share-body { grid-template-columns: 1fr; }
+}
 
 /* ── Sadece baskıda görünen başlık ──────────────────── */
 .qnr-print-header { display: none; }
@@ -273,6 +300,9 @@
         <button type="button" onclick="window.print()" class="qnr-print-btn">
             <i class="ti ti-printer"></i> Yazdır / PDF
         </button>
+        <button type="button" wire:click="openShareModal" class="qnr-share-btn">
+            <i class="ti ti-share"></i> Paylaş
+        </button>
     </div>
 
     @if($this->groupedNotes->isEmpty())
@@ -353,5 +383,108 @@
         @endforeach
     @endif
 @endif
+
+@if($shareModalOpen)
+    <div class="qnr-share-modal-backdrop" wire:click="closeShareModal">
+        <div class="qnr-share-modal" wire:click.stop>
+            <div class="qnr-share-head">
+                <h3 class="qnr-share-title">Güvenli Paylaşım Linki</h3>
+                <button type="button" class="qnr-share-close" wire:click="closeShareModal">✕</button>
+            </div>
+
+            <div class="qnr-share-body">
+                <label class="qnr-share-field" style="grid-column: 1 / -1;">
+                    <span class="qnr-share-label">Başlık (opsiyonel)</span>
+                    <input type="text" wire:model="shareTitle" class="qnr-share-input" placeholder="Örn: Bakara not araştırması" />
+                </label>
+
+                <label class="qnr-share-field">
+                    <span class="qnr-share-label">Görünürlük</span>
+                    <select wire:model="shareVisibility" class="qnr-share-select">
+                        <option value="public">Public (linke sahip olan görebilir)</option>
+                        <option value="private">Private (sadece paylaşan kullanıcı)</option>
+                    </select>
+                </label>
+
+                <label class="qnr-share-field">
+                    <span class="qnr-share-label">Geçerlilik Süresi</span>
+                    <select wire:model="shareExpiry" class="qnr-share-select">
+                        <option value="1d">1 gün</option>
+                        <option value="7d">7 gün</option>
+                        <option value="30d">30 gün</option>
+                        <option value="none">Süresiz</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="qnr-share-actions">
+                <button type="button" wire:click="createShareLink" class="qnr-share-generate">Link Oluştur</button>
+            </div>
+
+            @if($generatedShareUrl)
+                <div class="qnr-share-result">
+                    <label class="qnr-share-label" style="display:block; margin-bottom:5px;">Paylaşım Linki</label>
+                    <input readonly class="qnr-share-url" value="{{ $generatedShareUrl }}" onclick="this.select();" />
+
+                    <div class="qnr-share-socials">
+                        <a
+                            class="qnr-share-social-btn whatsapp"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://wa.me/?text={{ rawurlencode($generatedShareUrl) }}"
+                        >
+                            <i class="ti ti-brand-whatsapp"></i> WhatsApp
+                        </a>
+
+                        <a
+                            class="qnr-share-social-btn facebook"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($generatedShareUrl) }}"
+                        >
+                            <i class="ti ti-brand-facebook"></i> Facebook
+                        </a>
+
+                        <button
+                            type="button"
+                            class="qnr-share-social-btn instagram"
+                            onclick="copyAndOpenInstagram('{{ $generatedShareUrl }}')"
+                        >
+                            <i class="ti ti-brand-instagram"></i> Instagram
+                        </button>
+
+                        <button
+                            type="button"
+                            class="qnr-share-social-btn copy"
+                            onclick="copyShareLink('{{ $generatedShareUrl }}')"
+                        >
+                            <i class="ti ti-copy"></i> Kopyala
+                        </button>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+@endif
+
+@push('scripts')
+<script>
+function copyShareLink(url) {
+    if (!url) return;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('Paylaşım linki kopyalandı.');
+    }).catch(() => {
+        alert('Link kopyalanamadı.');
+    });
+}
+
+function copyAndOpenInstagram(url) {
+    if (!url) return;
+    navigator.clipboard.writeText(url).finally(() => {
+        window.open('https://www.instagram.com/', '_blank', 'noopener');
+    });
+}
+</script>
+@endpush
 
 </div>

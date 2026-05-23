@@ -3,10 +3,12 @@
 namespace App\Livewire;
 
 use App\Models\QuranWord;
+use App\Models\NoteShareLink;
 use App\Models\ResearchNote;
 use App\Models\ResearchTag;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class QuranNotesRangePage extends Component
@@ -46,6 +48,12 @@ class QuranNotesRangePage extends Component
     public string $filterType  = '';
 
     public bool $loaded = false;
+
+    public bool $shareModalOpen = false;
+    public string $shareTitle = '';
+    public string $shareVisibility = 'public';
+    public string $shareExpiry = '7d';
+    public ?string $generatedShareUrl = null;
 
     public function mount(): void
     {
@@ -95,6 +103,86 @@ class QuranNotesRangePage extends Component
         }
 
         $this->loaded = true;
+    }
+
+    public function openShareModal(): void
+    {
+        if (! $this->loaded || ! $this->isRangeValid || $this->groupedNotes->isEmpty()) {
+            return;
+        }
+
+        $this->shareModalOpen = true;
+        $this->generatedShareUrl = null;
+    }
+
+    public function closeShareModal(): void
+    {
+        $this->shareModalOpen = false;
+    }
+
+    public function createShareLink(): void
+    {
+        $user = auth()->user();
+        if (! $user || ! $this->loaded || $this->groupedNotes->isEmpty()) {
+            return;
+        }
+
+        $expiresAt = match ($this->shareExpiry) {
+            '1d' => now()->addDay(),
+            '7d' => now()->addDays(7),
+            '30d' => now()->addDays(30),
+            default => null,
+        };
+
+        $payload = [
+            'range' => [
+                'start' => $this->startSura . ':' . $this->startAya,
+                'end' => $this->endSura . ':' . $this->endAya,
+            ],
+            'filters' => [
+                'type' => $this->filterType,
+                'tag_id' => $this->filterTagId,
+            ],
+            'grouped' => $this->groupedNotes->map(function ($suraData) {
+                return [
+                    'name' => $suraData['name'],
+                    'noteCount' => $suraData['noteCount'],
+                    'ayas' => collect($suraData['ayas'])->map(function ($ayaData) {
+                        return [
+                            'arabic' => $ayaData['arabic'],
+                            'notes' => collect($ayaData['notes'])->map(function ($note) {
+                                return [
+                                    'type' => $note->type,
+                                    'type_label' => match ($note->type) {
+                                        'note' => 'Not',
+                                        'footnote' => 'Dipnot',
+                                        'research' => 'Araştırma',
+                                        default => $note->type,
+                                    },
+                                    'title' => $note->title,
+                                    'content' => $note->content,
+                                    'word_position' => $note->word_position,
+                                    'word_text' => $note->word_text ?? null,
+                                    'tags' => $note->tags->pluck('name')->values()->all(),
+                                    'updated_at' => optional($note->updated_at)->toIso8601String(),
+                                ];
+                            })->values()->all(),
+                        ];
+                    })->all(),
+                ];
+            })->all(),
+        ];
+
+        $share = NoteShareLink::query()->create([
+            'user_id' => $user->id,
+            'token' => Str::random(64),
+            'title' => trim($this->shareTitle) !== '' ? trim($this->shareTitle) : null,
+            'visibility' => in_array($this->shareVisibility, ['public', 'private'], true) ? $this->shareVisibility : 'public',
+            'expires_at' => $expiresAt,
+            'payload' => $payload,
+        ]);
+
+        $this->generatedShareUrl = route('notes.share.show', ['token' => $share->token]);
     }
 
     /* ── Computed: range geçerliliği ──────────────────── */

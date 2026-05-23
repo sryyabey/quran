@@ -75,6 +75,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(UserQuranPageBookmark::class);
     }
 
+    public function noteShareLinks(): HasMany
+    {
+        return $this->hasMany(NoteShareLink::class);
+    }
+
     public function canImpersonate(): bool
     {
         return $this->hasRole('super_admin');
