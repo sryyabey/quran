@@ -297,5 +297,35 @@
     "Preferences saved successfully!": "Preferences saved successfully!",
     "Arabic Font": "Arabic Font",
     "Select Arabic Font": "Select Arabic Font",
-    "This preference affects Quran Reading and Quran Text pages.": "This preference affects Quran Reading and Quran Text pages."
+    "This preference affects Quran Reading and Quran Text pages.": "This preference affects Quran Reading and Quran Text pages.",
+
+    "Quran text & word-by-word analysis": "Quran text & word-by-word analysis",
+    "Fullscreen mode": "Fullscreen mode",
+    "Platform": "Platform",
+    "Discover": "Discover",
+
+    "Authentic Mushaf Experience": "Authentic Mushaf Experience",
+    "reading_showcase_desc": "Read the Quran like a real mushaf. Verses flow line by line, and sura info cards appear between chapters.",
+
+    "Flowing Mushaf Layout": "Flowing Mushaf Layout",
+    "mushaf_layout_desc": "All verses flow as one continuous right-to-left passage — just like reading a real mushaf page.",
+    "New Design": "New Design",
+
+    "Sura Info Card": "Sura Info Card",
+    "sura_info_desc": "An elegant card at the start of each sura displays its name, verse count, word count, and letter count.",
+
+    "Searchable Sura Selector": "Searchable Sura Selector",
+    "sura_search_desc": "Instantly search all 114 suras by name or number and jump to any sura with a single click.",
+
+    "Page Bookmarks": "Page Bookmarks",
+    "bookmark_desc": "Save pages you want to return to as bookmarks, add labels, and jump back with one click.",
+
+    "Fullscreen Reading": "Fullscreen Reading",
+    "fullscreen_desc": "Remove all distractions with one button and switch to a focused fullscreen mushaf reading mode.",
+
+    "Global Search": "Global Search",
+    "feature_search_desc": "Search instantly across all your notes, tags, and sura content at the same time.",
+
+    "cta_title": "Begin your Quran study today",
+    "cta_desc": "Create a free account. No ads, no fees — just you and the Quran."
 }

@@ -297,5 +297,35 @@
     "Preferences saved successfully!": "Tercihler başarıyla kaydedildi!",
     "Arabic Font": "Arapça Font",
     "Select Arabic Font": "Arapça Font Seçin",
-    "This preference affects Quran Reading and Quran Text pages.": "Bu tercih Quran Reading ve Quran Text sayfalarını etkiler."
+    "This preference affects Quran Reading and Quran Text pages.": "Bu tercih Quran Reading ve Quran Text sayfalarını etkiler.",
+
+    "Quran text & word-by-word analysis": "Kuran metni ve kelime kelime analiz",
+    "Fullscreen mode": "Tam Ekran Modu",
+    "Platform": "Platform",
+    "Discover": "Keşfet",
+
+    "Authentic Mushaf Experience": "Otantik Mushaf Deneyimi",
+    "reading_showcase_desc": "Gerçek bir mushaf hissiyle Kur'an okuyun. Ayetler satır satır akar, sure başlarında bilgi kartları görüntülenir.",
+
+    "Flowing Mushaf Layout": "Akan Mushaf Düzeni",
+    "mushaf_layout_desc": "Tüm ayetler tek bir paragraf gibi sağdan sola akar; gerçek bir mushaf sayfası okuyormuş hissi verir.",
+    "New Design": "Yeni Tasarım",
+
+    "Sura Info Card": "Sure Bilgi Kartı",
+    "sura_info_desc": "Her sure başında isim, ayet sayısı, kelime ve harf sayısını gösteren zarif bir bilgi kartı görüntülenir.",
+
+    "Searchable Sura Selector": "Aranabilir Sure Seçici",
+    "sura_search_desc": "114 sure arasında ad veya numarasına göre anında arama yapın, tek tıkla istediğiniz sureye gidin.",
+
+    "Page Bookmarks": "Sayfa Yer İmleri",
+    "bookmark_desc": "Okumaya devam etmek istediğiniz sayfaları yer imi olarak kaydedin, etiket ekleyin, tek tıkla geri dönün.",
+
+    "Fullscreen Reading": "Tam Ekran Okuma",
+    "fullscreen_desc": "Tek tuşla dikkat dağıtıcı tüm öğeleri kaldırın ve tam ekran mushaf okuma moduna geçin.",
+
+    "Global Search": "Global Arama",
+    "feature_search_desc": "Notlarınızda, etiketlerde ve tüm sure içeriklerinde aynı anda anlık arama yapın.",
+
+    "cta_title": "Kur'an çalışmanıza bugün başlayın",
+    "cta_desc": "Ücretsiz hesap oluşturun. Reklam yok, ücret yok — sadece siz ve Kur'an."
 }
