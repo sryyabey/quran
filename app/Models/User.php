@@ -81,6 +81,25 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(NoteShareLink::class);
     }
 
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
+
+    public function activeSubscription(): ?UserSubscription
+    {
+        return $this->subscriptions()
+            ->where('status', 'active')
+            ->where('ends_at', '>', now())
+            ->latest('ends_at')
+            ->first();
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->activeSubscription() !== null;
+    }
+
     public function canImpersonate(): bool
     {
         return $this->hasRole('super_admin');
