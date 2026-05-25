@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthTokenController;
 use App\Http\Controllers\Api\BackupController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\QuranDatabaseController;
+use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\VerseTranslationsDatasetController;
 use Illuminate\Http\Request;
@@ -49,4 +50,9 @@ Route::middleware('auth:sanctum')->prefix('quran')->group(function () {
 
 Route::middleware('auth:sanctum')->prefix('datasets')->group(function () {
     Route::get('/verse-translations/download', [VerseTranslationsDatasetController::class, 'download']);
+});
+
+Route::middleware('auth:sanctum')->prefix('sync')->group(function () {
+    Route::get('/pull', [SyncController::class, 'pull']);
+    Route::post('/push', [SyncController::class, 'push']);
 });

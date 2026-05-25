@@ -43,7 +43,7 @@ class BackupService
         ]);
 
         try {
-            $payload = $this->buildPayload($user);
+            $payload = $this->exportPayload($user);
             $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
             if ($json === false) {
@@ -101,10 +101,10 @@ class BackupService
             throw new \RuntimeException('Backup file is not valid JSON.');
         }
 
-        return DB::transaction(fn () => $this->replaceUserDataFromPayload($user, $payload));
+        return DB::transaction(fn () => $this->importPayload($user, $payload));
     }
 
-    private function buildPayload(User $user): array
+    public function exportPayload(User $user): array
     {
         $notes = ResearchNote::query()->where('user_id', $user->id)->with('tags:id')->get();
         $tags = ResearchTag::query()->where('user_id', $user->id)->get();
@@ -179,7 +179,7 @@ class BackupService
         ];
     }
 
-    private function replaceUserDataFromPayload(User $user, array $payload): array
+    public function importPayload(User $user, array $payload): array
     {
         $data = $payload['data'] ?? [];
 

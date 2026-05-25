@@ -3,5 +3,6 @@
 @section('title', __('Quran Text'))
 
 @section('content')
-<livewire:quran-text-page />
+
+    <livewire:quran-text-page />
 @endsection

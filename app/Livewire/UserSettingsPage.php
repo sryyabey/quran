@@ -34,7 +34,7 @@ class UserSettingsPage extends Component
 
     public function addMeal(string $mealKey): void
     {
-        if (! $this->selectedLanguage) {
+        if (!$this->selectedLanguage) {
             return;
         }
 
@@ -43,11 +43,11 @@ class UserSettingsPage extends Component
             ->where('meal_key', $mealKey)
             ->exists();
 
-        if (! $exists) {
+        if (!$exists) {
             return;
         }
 
-        if (! in_array($mealKey, $this->selectedMealKeys, true)) {
+        if (!in_array($mealKey, $this->selectedMealKeys, true)) {
             $this->selectedMealKeys[] = $mealKey;
             sort($this->selectedMealKeys);
         }
@@ -56,7 +56,7 @@ class UserSettingsPage extends Component
     public function removeMeal(string $mealKey): void
     {
         $this->selectedMealKeys = collect($this->selectedMealKeys)
-            ->reject(fn (string $key) => $key === $mealKey)
+            ->reject(fn(string $key) => $key === $mealKey)
             ->values()
             ->all();
     }
@@ -65,12 +65,12 @@ class UserSettingsPage extends Component
     {
         $user = auth()->user();
 
-        if (! $user || ! $this->selectedLanguage) {
+        if (!$user || !$this->selectedLanguage) {
             return;
         }
 
         $allowedFontKeys = array_keys($this->arabicFontOptions);
-        if (! in_array($this->selectedArabicFont, $allowedFontKeys, true)) {
+        if (!in_array($this->selectedArabicFont, $allowedFontKeys, true)) {
             $this->selectedArabicFont = 'amiri';
         }
 
@@ -97,7 +97,7 @@ class UserSettingsPage extends Component
 
         foreach ($allowedMealKeys as $mealKey) {
             UserMealPreference::query()->create([
-                'user_id'  => $user->id,
+                'user_id' => $user->id,
                 'language' => $this->selectedLanguage,
                 'meal_key' => $mealKey,
             ]);
@@ -132,7 +132,7 @@ class UserSettingsPage extends Component
     public function getAvailableMealsProperty()
     {
         return $this->mealsForLanguage
-            ->reject(fn (string $mealKey) => in_array($mealKey, $this->selectedMealKeys, true))
+            ->reject(fn(string $mealKey) => in_array($mealKey, $this->selectedMealKeys, true))
             ->values();
     }
 
@@ -154,7 +154,7 @@ class UserSettingsPage extends Component
     {
         $user = auth()->user();
 
-        if (! $user || ! $this->selectedLanguage) {
+        if (!$user || !$this->selectedLanguage) {
             $this->selectedMealKeys = [];
             return;
         }
