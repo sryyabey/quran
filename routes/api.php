@@ -52,7 +52,7 @@ Route::middleware('auth:sanctum')->prefix('datasets')->group(function () {
     Route::get('/verse-translations/download', [VerseTranslationsDatasetController::class, 'download']);
 });
 
-Route::middleware('auth:sanctum')->prefix('sync')->group(function () {
+Route::middleware(['auth:sanctum', 'subscription.active'])->prefix('sync')->group(function () {
     Route::get('/pull', [SyncController::class, 'pull']);
     Route::post('/push', [SyncController::class, 'push']);
 });

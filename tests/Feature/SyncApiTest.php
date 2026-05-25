@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\ResearchNote;
 use App\Models\ResearchTag;
 use App\Models\User;
+use App\Models\UserSubscription;
 use App\Models\UserSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,6 +18,7 @@ class SyncApiTest extends TestCase
     {
         $user = User::factory()->create();
         $token = $user->createToken('test-device')->plainTextToken;
+        $this->createActiveSubscription($user);
 
         ResearchTag::query()->create([
             'user_id' => $user->id,
@@ -49,6 +51,7 @@ class SyncApiTest extends TestCase
     {
         $user = User::factory()->create();
         $token = $user->createToken('test-device')->plainTextToken;
+        $this->createActiveSubscription($user);
 
         $payload = [
             'schema_version' => 1,
@@ -113,5 +116,28 @@ class SyncApiTest extends TestCase
     {
         $this->getJson('/api/sync/pull')->assertUnauthorized();
         $this->postJson('/api/sync/push', [])->assertUnauthorized();
+    }
+
+    public function test_authenticated_user_without_active_subscription_cannot_access_sync_endpoints(): void
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('test-device')->plainTextToken;
+
+        $this->withToken($token)->getJson('/api/sync/pull')->assertStatus(402);
+        $this->withToken($token)->postJson('/api/sync/push', [
+            'payload' => ['schema_version' => 1, 'data' => []],
+        ])->assertStatus(402);
+    }
+
+    private function createActiveSubscription(User $user): void
+    {
+        UserSubscription::query()->create([
+            'user_id' => $user->id,
+            'plan_code' => 'yearly',
+            'status' => 'active',
+            'starts_at' => now()->subMinute(),
+            'ends_at' => now()->addMonth(),
+            'meta' => [],
+        ]);
     }
 }
